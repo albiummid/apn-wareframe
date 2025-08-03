@@ -8,14 +8,20 @@ export default function RegisterScreen() {
     const [passwordShown, { toggle }] = useDisclosure();
     const form = useForm({
         initialValues: {
+            firstName: "",
+            lastName: "",
             email: "",
             password: "",
+            confirmpassword: "",
         },
     });
 
     const handleSubmit = async (values: {
+        firstName: string;
+        lastName: string;
         email: string;
         password: string;
+        confirmpassword: string;
     }) => {
         console.log(values);
     };
@@ -23,15 +29,29 @@ export default function RegisterScreen() {
         <div className="flex justify-center items-center min-h-screen">
             <div className=" border p-5 rounded-lg w-1/2 max-w-sm border-gray-200 shadow-lg">
                 <div className="my-5 space-y-2 text-center">
-                    <h1 className=" text-4xl text-center">Sign In</h1>
+                    <h1 className=" text-4xl text-center">Regstration  </h1>
                     <p className=" text-xs text-gray-400">
-                        Sign in to your account with credentials
+                        Sign Up to your account with credentials
                     </p>
                 </div>
                 <form
                     className=" space-y-3"
                     onSubmit={form.onSubmit(handleSubmit)}
                 >
+                    <div className="flex justify-between items-center gap-2">
+                        <TextInput
+                            withAsterisk
+                            label={"First Name"}
+                            placeholder="Enter Your First Name"
+                            {...form.getInputProps("firstName")}
+                        />
+                        <TextInput
+                            withAsterisk
+                            label={"Last Name"}
+                            placeholder="Enter Your Last Name"
+                            {...form.getInputProps("lastName")}
+                        />
+                    </div>
                     <TextInput
                         withAsterisk
                         label={"Email"}
@@ -52,9 +72,23 @@ export default function RegisterScreen() {
                             )
                         }
                     />
+                    <TextInput
+                        withAsterisk
+                        label={"Confirm Password"}
+                        placeholder="your secret password"
+                        {...form.getInputProps("confirmpassword")}
+                        type={passwordShown ? "text" : "confirmpassword"}
+                        rightSection={
+                            passwordShown ? (
+                                <FiEye onClick={toggle} />
+                            ) : (
+                                <FiEyeOff onClick={toggle} />
+                            )
+                        }
+                    />
                     <div className="flex justify-center items-center mt-10">
                         <Button fullWidth type="submit">
-                            Login
+                            Regstration
                         </Button>
                     </div>
                 </form>
