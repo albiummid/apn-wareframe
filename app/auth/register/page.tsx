@@ -2,10 +2,12 @@
 import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function RegisterScreen() {
     const [passwordShown, { toggle }] = useDisclosure();
+    const [passwordconfirmShown, { toggle:toggle1 }] = useDisclosure();
     const form = useForm({
         initialValues: {
             firstName: "",
@@ -14,6 +16,11 @@ export default function RegisterScreen() {
             password: "",
             confirmpassword: "",
         },
+         validate: {
+      confirmpassword: (value, values) =>
+        value !== values.password ? 'Passwords did not match' : null,
+    },
+        
     });
 
     const handleSubmit = async (values: {
@@ -62,6 +69,7 @@ export default function RegisterScreen() {
                         withAsterisk
                         label={"Password"}
                         placeholder="your secret password"
+                       
                         {...form.getInputProps("password")}
                         type={passwordShown ? "text" : "password"}
                         rightSection={
@@ -76,19 +84,20 @@ export default function RegisterScreen() {
                         withAsterisk
                         label={"Confirm Password"}
                         placeholder="your secret password"
+                        
                         {...form.getInputProps("confirmpassword")}
-                        type={passwordShown ? "text" : "confirmpassword"}
+                        type={passwordconfirmShown ? "text" : "password"}
                         rightSection={
-                            passwordShown ? (
-                                <FiEye onClick={toggle} />
+                            passwordconfirmShown ? (
+                                <FiEye onClick={toggle1} />
                             ) : (
-                                <FiEyeOff onClick={toggle} />
+                                <FiEyeOff onClick={toggle1} />
                             )
                         }
                     />
                     <div className="flex justify-center items-center mt-10">
                         <Button fullWidth type="submit">
-                            Regstration
+                            Regster
                         </Button>
                     </div>
                 </form>
