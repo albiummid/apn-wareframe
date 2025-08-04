@@ -4,7 +4,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { FaChartPie, FaUncharted } from "react-icons/fa";
-import { GrResources, GrStorage } from "react-icons/gr";
+import { GrStorage } from "react-icons/gr";
 import { MdKey } from "react-icons/md";
 import { SiAmazonec2 } from "react-icons/si";
 
@@ -23,16 +23,10 @@ export default function DashboardLayout(props: PropsWithChildren) {
                     link: "/overview",
                     icon: <FaChartPie />,
                 },
-                {
-                    label: "Resources",
-                    link: "/resources",
-                    disabled: true,
-                    icon: <GrResources />,
-                },
             ],
         },
         {
-            label: "Computing",
+            label: "APN",
             icon: <FaChartPie />,
             links: [
                 {
@@ -41,16 +35,60 @@ export default function DashboardLayout(props: PropsWithChildren) {
                     icon: <SiAmazonec2 />,
                 },
                 {
-                    label: "Volume",
+                    label: "Elastic Load Balance",
                     link: "/computing/volume",
                     disabled: true,
                     icon: <GrStorage />,
                 },
                 {
-                    label: "Key Pairs",
+                    label: "Auto Scaling Group",
                     link: "/computing/key-pairs",
                     disabled: true,
                     icon: <MdKey />,
+                },
+            ],
+        },
+        {
+            label: "CRM",
+            icon: <FaUncharted />,
+            links: [
+                {
+                    label: "Overview",
+                    link: "/overview",
+                    icon: <FaChartPie />,
+                },
+            ],
+        },
+        {
+            label: "Market Place",
+            icon: <FaUncharted />,
+            links: [
+                {
+                    label: "Overview",
+                    link: "/overviedw",
+                    icon: <FaChartPie />,
+                },
+            ],
+        },
+        {
+            label: "Reporting Analysis",
+            icon: <FaUncharted />,
+            links: [
+                {
+                    label: "Overview",
+                    link: "/overvieww",
+                    icon: <FaChartPie />,
+                },
+            ],
+        },
+        {
+            label: "Settings and Admin",
+            icon: <FaUncharted />,
+            links: [
+                {
+                    label: "Overview",
+                    link: "/overviews",
+                    icon: <FaChartPie />,
                 },
             ],
         },
@@ -85,7 +123,6 @@ export default function DashboardLayout(props: PropsWithChildren) {
                         <AppShell.Section key={section.label}>
                             <NavLink
                                 leftSection={section.icon}
-                                opened
                                 label={section.label}
                             >
                                 <>
@@ -115,8 +152,11 @@ export default function DashboardLayout(props: PropsWithChildren) {
                 })}
 
                 {/* Footer */}
-                <AppShell.Section className="mt-auto" p="md">
-                    <Button fullWidth>SignOut</Button>
+                <AppShell.Section
+                    className="mt-auto flex justify-center"
+                    p="md"
+                >
+                    <Button>SignOut</Button>
                 </AppShell.Section>
             </AppShell.Navbar>
             <AppShell.Main>{props.children}</AppShell.Main>
