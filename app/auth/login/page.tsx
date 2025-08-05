@@ -18,6 +18,7 @@ export default function LoginScreen() {
         password: string;
     }) => {
         console.log(values);
+        
     };
     return (
         <div className="flex justify-center items-center min-h-screen">
