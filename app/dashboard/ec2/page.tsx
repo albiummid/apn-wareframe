@@ -1,6 +1,8 @@
 "use client";
 import DashWrapper from "@/component/layouts/dashwrapper";
-import EC2InstanceModal from "@/components/modals/ec2-instance-create-modal";
+import EC2InstanceModal, {
+    useEC2CreationState,
+} from "@/components/modals/ec2-instance-create-modal";
 import TurboTable, { TableColumn } from "@/components/turbo-table";
 import { Button, Menu, TextInput } from "@mantine/core";
 import { useState } from "react";
@@ -10,7 +12,10 @@ import { FaRotateRight } from "react-icons/fa6";
 type TInstanceStatus = "running" | "stopped" | "hibernated" | "rebooting";
 export default function Page() {
     const [isLoading, setIsLoading] = useState(false);
-    const [launchModalOpened, setLaunchModalOpened] = useState(false);
+    const { opened, setState } = useEC2CreationState();
+    const setOpened = (status: boolean) => {
+        setState({ opened: status });
+    };
     const [instanceInfo, setInstanceInfo] = useState<{
         id: number;
         _id: string;
@@ -156,7 +161,7 @@ export default function Page() {
 
                         <Button
                             onClick={() => {
-                                setLaunchModalOpened(true);
+                                setOpened(true);
                             }}
                             variant="outline"
                         >
@@ -214,9 +219,9 @@ export default function Page() {
                 />
             </div>
             <EC2InstanceModal
-                opened={launchModalOpened}
+                opened={opened}
                 onClose={() => {
-                    setLaunchModalOpened(false);
+                    setOpened(false);
                 }}
             />
         </DashWrapper>

@@ -48,7 +48,7 @@ const MyAMIs = () => {
 };
 
 const QuickStart = () => {
-    const { osImage, setState, osArch } = useEC2CreationState();
+    const { osImage, setState, osArch, name } = useEC2CreationState();
 
     useEffect(() => {
         setState({ osImage: osList[0], osArch: archList[0] });
@@ -134,7 +134,17 @@ const QuickStart = () => {
     ];
 
     const handleNavigateNext = () => {
-        setState({ sectionEnabledTill: 6 });
+        if (name.length > 0) {
+            setState({
+                errors: { name: undefined },
+                sectionEnabledTill: 6,
+            });
+        } else {
+            setState({
+                errors: { name: "Name field is required" },
+                sectionEnabledTill: 2,
+            });
+        }
     };
 
     return (
