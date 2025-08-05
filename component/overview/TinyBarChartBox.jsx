@@ -102,7 +102,7 @@ const TinyBarChartBox = () => {
                     <div className='items-center'>
 
                         <BarChart
-                            width={490}
+                            width={550}
                             height={300}
                             data={data}
                             margin={{
