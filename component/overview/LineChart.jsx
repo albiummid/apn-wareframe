@@ -98,9 +98,9 @@ const LineChartView = () => {
 
 
   return (
-    <div className='w-223 h-83 flex  items-center justify-between mb-8'>
+    <div className='w-223 h-83 flex  items-center justify-between mb-2 mt-2'>
 
-      <div className='w-165 h-83 bg-[#F9F9FA] rounded-2xl'>
+      <div className='w-165 h-89 bg-[#F9F9FA] rounded-2xl'>
         <div className='flex flex-wrap  py-4 px-5 gap-4  items-center'>
           <h1>Total Users</h1>
           <h1 className='text-black opacity-30'>Total Projects</h1>
