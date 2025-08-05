@@ -87,15 +87,58 @@ const data02 = [
 ];
 
 
+const StatCard = ({ label1, label2, color }) => {
+
+    return (
+
+        <div className='grid grid-cols-2 items-center gap-8 '>
+            <div className='flex items-center gap-2 w-40 '>
+                <GoDotFill color={color} />
+                <h4 >{label1}</h4>
+            </div>
+            <div>
+                <h4>{label2}</h4>
+            </div>
+        </div>
+    )
+}
+
+
 
 const TinyBarChartBox = () => {
 
+    const statList = [
+        {
 
+            label1: "United States",
+            label2: "52.1%",
+            color: '#000000',
+        },
+        {
 
+            label1: "Canada",
+            label2: "22.8%",
+            color: 'yellow',
+        },
+        {
+
+            label1: "Mexico",
+            label2: "13.9%",
+            color: 'green',
+        },
+        {
+
+            label1: "Other",
+            label2: "11.2%",
+            color: 'red',
+        },
+   
+
+    ]
 
 
     return (
-        <div className='w-250 h-70 flex items-center justify-between   '>
+        <div className=' h-70 w-280 flex items-center justify-between   '>
             <div className='grid grid-cols-2 gap-4 w-full h-full '>
                 <div className='w-full h-75 bg-[#F9F9FA] py-4 px-4 rounded-2xl mt-8'>
                     <h1>Traffic by Device</h1>
@@ -126,7 +169,7 @@ const TinyBarChartBox = () => {
                 {/*  */}
                 <div className='w-full h-75 bg-[#F9F9FA] py-4 px-4 rounded-2xl mt-8'>
                     <h1>Traffic by Device</h1>
-                    <div className='flex flex-wrap items-center gap-4 '>
+                    <div className='grid grid-cols-2 gap-10 items-center justify-between  '>
                         <div>
                             <PieChart width={250} height={250}>
                                 <Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="#AEC7ED" />
@@ -135,33 +178,44 @@ const TinyBarChartBox = () => {
                             </PieChart>
 
                         </div>
-                        <div>
-                            <div>
-                                <ul >
-                                    <li className='flex flex-wrap gap-4 items-center'>
-                                        <GoDotFill className='text-[#000000]' />
-                                        <h4 >United States</h4>
-                                        <h4>52.1%</h4>
-                                    </li>
-                                    <li className='flex flex-wrap gap-4 items-center'>
-                                        <GoDotFill className='text-[#92BFFF]' />
-                                        <h4 >Canada</h4>
-                                        <h4>22.8%</h4>
-                                    </li>
-                                    <li className='flex flex-wrap gap-4 items-center'>
-                                        <GoDotFill className='text-[#94E9B8]' />
-                                        <h4 >Mexico</h4>
-                                        <h4>13.9%</h4>
-                                    </li>
-                                    <li className='flex flex-wrap gap-4 items-center'>
-                                        <GoDotFill className='text-[#AEC7ED]' />
-                                        <h4 >Other</h4>
-                                        <h4>11.2%</h4>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
 
+                        <div>
+                            <ul >
+                                <li >
+                                    {statList.map((item, idx) => (
+
+                                        <StatCard key={idx} label1={item.label1} label2={item.label2} color={item.color}  />
+
+                                    ))}
+
+                                </li>
+                                {/* 
+                                <li >
+                                    <div className='grid grid-cols-2 items-center gap-8 '>
+                                        <div className='flex items-center gap-2 '>
+                                            <GoDotFill className='text-[#94E9B8]' />
+                                            <h4 ></h4>
+                                        </div>
+                                        <div>
+                                            <h4></h4>
+                                        </div>
+                                    </div>
+
+                                </li>
+                                <li >
+                                    <div className='grid grid-cols-2 items-center gap-8 '>
+                                        <div className='flex items-center gap-2 '>
+                                            <GoDotFill className='text-[#AEC7ED]' />
+                                            <h4 ></h4>
+                                        </div>
+                                        <div>
+                                            <h4></h4>
+                                        </div>
+                                    </div>
+
+                                </li> */}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
