@@ -118,7 +118,7 @@ const TinyBarChartBox = () => {
 
             label1: "Canada",
             label2: "22.8%",
-            color: 'yellow',
+            color: 'blue',
         },
         {
 
@@ -189,31 +189,6 @@ const TinyBarChartBox = () => {
                                     ))}
 
                                 </li>
-                                {/* 
-                                <li >
-                                    <div className='grid grid-cols-2 items-center gap-8 '>
-                                        <div className='flex items-center gap-2 '>
-                                            <GoDotFill className='text-[#94E9B8]' />
-                                            <h4 ></h4>
-                                        </div>
-                                        <div>
-                                            <h4></h4>
-                                        </div>
-                                    </div>
-
-                                </li>
-                                <li >
-                                    <div className='grid grid-cols-2 items-center gap-8 '>
-                                        <div className='flex items-center gap-2 '>
-                                            <GoDotFill className='text-[#AEC7ED]' />
-                                            <h4 ></h4>
-                                        </div>
-                                        <div>
-                                            <h4></h4>
-                                        </div>
-                                    </div>
-
-                                </li> */}
                             </ul>
                         </div>
                     </div>
