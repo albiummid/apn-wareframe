@@ -1,5 +1,6 @@
 "use client";
 import DashWrapper from "@/component/layouts/dashwrapper";
+import EC2InstanceModal from "@/components/modals/ec2-instance-create-modal";
 import TurboTable, { TableColumn } from "@/components/turbo-table";
 import { Button, Menu, TextInput } from "@mantine/core";
 import { useState } from "react";
@@ -9,6 +10,7 @@ import { FaRotateRight } from "react-icons/fa6";
 type TInstanceStatus = "running" | "stopped" | "hibernated" | "rebooting";
 export default function Page() {
     const [isLoading, setIsLoading] = useState(false);
+    const [launchModalOpened, setLaunchModalOpened] = useState(false);
     const [instanceInfo, setInstanceInfo] = useState<{
         id: number;
         _id: string;
@@ -152,7 +154,14 @@ export default function Page() {
                             </Menu.Dropdown>
                         </Menu>
 
-                        <Button variant="outline">Launch Instance</Button>
+                        <Button
+                            onClick={() => {
+                                setLaunchModalOpened(true);
+                            }}
+                            variant="outline"
+                        >
+                            Launch Instance
+                        </Button>
                     </div>
                 </div>
                 {/* Search sections */}
@@ -173,7 +182,7 @@ export default function Page() {
                     // setSelectedRows={setSelectedRows}
                     onRowSelect={(item) => {
                         setInstanceInfo((pv) => {
-                            if (pv) {
+                            if (pv && pv._id === item._id) {
                                 setSelectedRows([]);
                                 return null;
                             }
@@ -204,6 +213,12 @@ export default function Page() {
                     ]}
                 />
             </div>
+            <EC2InstanceModal
+                opened={launchModalOpened}
+                onClose={() => {
+                    setLaunchModalOpened(false);
+                }}
+            />
         </DashWrapper>
     );
 }
