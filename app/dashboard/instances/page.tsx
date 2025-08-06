@@ -218,12 +218,7 @@ export default function Page() {
                     ]}
                 />
             </div>
-            <EC2InstanceModal
-                opened={opened}
-                onClose={() => {
-                    setOpened(false);
-                }}
-            />
+            <EC2InstanceModal />
         </DashWrapper>
     );
 }
