@@ -3,10 +3,10 @@ import { AppShell, Burger, Button, Group, NavLink } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
-import { FaChartPie, FaUncharted } from "react-icons/fa";
-import { GrStorage } from "react-icons/gr";
-import { MdKey } from "react-icons/md";
+import { FaChartPie, FaDatabase, FaUncharted } from "react-icons/fa";
+import { FaBucket } from "react-icons/fa6";
 import { SiAmazonec2 } from "react-icons/si";
+import { GiNetworkBars } from "react-icons/gi";
 
 export default function DashboardLayout(props: PropsWithChildren) {
     const [opened, { toggle }] = useDisclosure();
@@ -30,21 +30,27 @@ export default function DashboardLayout(props: PropsWithChildren) {
             icon: <FaChartPie />,
             links: [
                 {
-                    label: "EC2 Instances",
-                    link: "/ec2",
+                    label: "Instances",
+                    link: "/instances",
                     icon: <SiAmazonec2 />,
                 },
                 {
-                    label: "Elastic Load Balance",
-                    link: "/computing/volume",
+                    label: "S3 Buckest",
+                    link: "/s3-buckets",
                     disabled: true,
-                    icon: <GrStorage />,
+                    icon: <FaBucket />,
                 },
                 {
-                    label: "Auto Scaling Group",
-                    link: "/computing/key-pairs",
+                    label: "RDS Databases",
+                    link: "/rds-databases",
                     disabled: true,
-                    icon: <MdKey />,
+                    icon: <FaDatabase />,
+                },
+                {
+                    label: "Networks",
+                    link: "/networks",
+                    disabled: true,
+                    icon: <GiNetworkBars/>,
                 },
             ],
         },
