@@ -1,19 +1,9 @@
 import { Flex, TagsInput, TextInput } from "@mantine/core";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
 import { useEC2CreationState } from ".";
 
 export default function NameAndTag() {
     const { name, tags, setState, errors } = useEC2CreationState();
     const error = errors["name"];
-
-    useEffect(() => {
-        if (error) {
-            let el = document.getElementById("ac_1");
-            el?.scrollIntoView({ behavior: "smooth" });
-            toast.error(error);
-        }
-    }, [error]);
 
     return (
         <div className=" space-y-5">

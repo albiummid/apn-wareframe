@@ -1,11 +1,38 @@
 import TerminalSimulator from "@/components/terminal";
 import { Button, Stack } from "@mantine/core";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { useEC2CreationState } from ".";
 
 export default function InstanceTypes() {
-    const { setState } = useEC2CreationState();
+    const { setState, activeSections, name } = useEC2CreationState();
     const [opened, setOpened] = useState(false);
+
+    const validateError = () => {
+        let isValid = true;
+        if (name.length > 0) {
+            setState({
+                errors: { name: undefined },
+            });
+        } else {
+            isValid = false;
+            let msg = "Name field is required";
+            toast.error(msg);
+            setState({
+                errors: { name: msg },
+            });
+            document
+                .getElementById("ac_1")
+                ?.scrollIntoView({ behavior: "smooth" });
+        }
+
+        return isValid;
+    };
+    const handleLaunchInstance = async () => {
+        const isValid = validateError();
+        if (!isValid) return;
+        setOpened(true);
+    };
     return (
         <Stack>
             <div className="space-y-3">
@@ -39,18 +66,14 @@ export default function InstanceTypes() {
                 </div>
             </div>
 
-            <Button
-                mt={10}
-                onClick={() => {
-                    setOpened((prv) => !prv);
-                }}
-            >
-                Launch Instance
+            <Button loading={opened} mt={10} onClick={handleLaunchInstance}>
+                {opened ? "Launching..." : "Launch Instance"}
             </Button>
             {opened && (
                 <TerminalSimulator
                     onFinish={() => {
                         setState({ opened: false });
+                        toast.success("EC2 Instance created");
                     }}
                 />
             )}

@@ -42,7 +42,7 @@ export const useEC2CreationState = create<TState>((set, get) => ({
         label: "",
         value: "",
     },
-    sectionEnabledTill: 3,
+    sectionEnabledTill: 4,
     activeSections: ["1", "2", "3"],
     errors: {},
     setState(state) {
