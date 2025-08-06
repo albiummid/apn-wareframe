@@ -1,25 +1,15 @@
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import type { Metadata } from "next";
-import { Bounce, ToastContainer } from "react-toastify";
 import "./globals.css";
 
-import {
-    ColorSchemeScript,
-    MantineProvider,
-    createTheme,
-    mantineHtmlProps,
-} from "@mantine/core";
+import Providers from "@/components/providers";
+import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
 
 export const metadata: Metadata = {
     title: "BetopiaCloud - APN wareframe",
     description: "APN Wareframe",
 };
-
-const theme = createTheme({
-    fontFamily: "Open Sans, sans-serif",
-    primaryColor: "cyan",
-});
 
 export default function RootLayout({
     children,
@@ -32,20 +22,7 @@ export default function RootLayout({
                 <ColorSchemeScript />
             </head>
             <body>
-                <ToastContainer
-                    position="top-right"
-                    autoClose={2000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick={false}
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="colored"
-                    transition={Bounce}
-                />
-                <MantineProvider theme={theme}>{children}</MantineProvider>
+                <Providers>{children}</Providers>
             </body>
         </html>
     );

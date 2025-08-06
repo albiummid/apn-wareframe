@@ -1,36 +1,63 @@
 "use client";
+import { api } from "@/services/api";
 import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 export default function RegisterScreen() {
-    const [passwordShown, { toggle: togglePasswordShown }] = useDisclosure();
+    const [passwordShown, { toggle: togglePasswordShown }] =
+        useDisclosure(false);
     const [confirmPasswordShown, { toggle: toggleConfirmPasswordShown }] =
-        useDisclosure();
+        useDisclosure(false);
     const form = useForm({
         initialValues: {
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
+            firstName: "Albi",
+            lastName: "Ummid",
+            email: "albi.ummid@gmail.com",
+            password: "albiummidtanvir",
+            confirmPassword: "albiummidtanvir",
         },
         validate: {
+            firstName: (value) =>
+                !value ? "Required" : value.length < 3 && "Must be 3 character",
+            lastName: (value) =>
+                !value ? "Required" : value.length < 3 && "Must be 3 character",
+            email: (value) =>
+                !/^\S+@\S+$/.test(value)
+                    ? "Invalid email"
+                    : !value && "Email is required",
+            password: (value) =>
+                !value
+                    ? "Required"
+                    : value.length < 6 && "Password must be 6 length",
             confirmPassword: (value, values) =>
-                value !== values.password ? "Passwords did not match" : null,
+                !value
+                    ? "Required"
+                    : value !== values.password
+                    ? "Passwords did not match"
+                    : null,
+        },
+    });
+    const router = useRouter();
+
+    const { mutate, error } = useMutation({
+        mutationKey: ["register"],
+        mutationFn: async (values: typeof form.values) => {
+            return await api.post("/auth/register", values);
+        },
+        onError(error) {
+            toast.error(error.message);
+        },
+        onSuccess(data) {
+            toast.success(data.data.message);
+            router.push("/auth/login");
         },
     });
 
-    const handleSubmit = async (values: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        password: string;
-        confirmPassword: string;
-    }) => {
-        console.log(values);
-    };
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className=" border p-5 rounded-lg w-1/2 max-w-sm border-gray-200 shadow-lg">
@@ -42,7 +69,9 @@ export default function RegisterScreen() {
                 </div>
                 <form
                     className=" space-y-3"
-                    onSubmit={form.onSubmit(handleSubmit)}
+                    onSubmit={form.onSubmit((values) => {
+                        mutate(values);
+                    })}
                 >
                     <div className="flex justify-between items-center gap-2">
                         <TextInput
@@ -92,7 +121,8 @@ export default function RegisterScreen() {
                             </div>
                         }
                     />
-                    <div className="flex justify-center items-center mt-10">
+                    <p className="text-center text-red-500">{error?.message}</p>
+                    <div className="flex justify-center items-center mt-5 space-y-2">
                         <Button fullWidth type="submit">
                             Register
                         </Button>
