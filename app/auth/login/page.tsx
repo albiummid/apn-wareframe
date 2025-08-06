@@ -14,8 +14,8 @@ export default function LoginScreen() {
     const [error, setError] = useState("");
     const form = useForm({
         initialValues: {
-            email: "fdsl@lkjklf.coml",
-            password: "jfklsdfjklsdjl",
+            email: "",
+            password: "",
         },
         validate: {
             email: (value) =>
