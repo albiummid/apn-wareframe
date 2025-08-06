@@ -48,8 +48,6 @@ const StatCard2 = ({ Icon, title }: { Icon: ReactNode, title: ReactNode }) => {
 
 export default function NotificationBar() {
 
-
-
     const statList = [
         {
             title: "You fixed a bug",
