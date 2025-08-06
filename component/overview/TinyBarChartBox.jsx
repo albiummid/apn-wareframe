@@ -49,7 +49,7 @@ const data = [
 const data01 = [
     {
         "name": "United States",
-        "value": 52,
+        "value": 52.1,
     },
     {
         "name": "Canada",
@@ -69,7 +69,7 @@ const data01 = [
 const data02 = [
     {
         "name": "United States",
-        "value": 52,
+        "value": 52.1,
     },
     {
         "name": "Canada",
@@ -81,7 +81,7 @@ const data02 = [
     },
     {
         "name": "Other",
-        "value": 17.2
+        "value": 11.2 
     },
 
 ];
