@@ -13,6 +13,8 @@ export default function RegisterScreen() {
         useDisclosure(false);
     const [confirmPasswordShown, { toggle: toggleConfirmPasswordShown }] =
         useDisclosure(false);
+
+        
     const form = useForm({
         initialValues: {
             firstName: "Albi",

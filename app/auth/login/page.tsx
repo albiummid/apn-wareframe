@@ -3,19 +3,21 @@ import { api } from "@/services/api";
 import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { log } from "console";
 import Link from "next/link";
+import {  useRouter } from "next/navigation";
 import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 export default function LoginScreen() {
     const [passwordShown, { toggle }] = useDisclosure();
-    const [error, setError] = useState("");
     const form = useForm({
         initialValues: {
-            email: "",
-            password: "",
+            email: "tanvir@gmail.com",
+            password: "123456789",
         },
         validate: {
             email: (value) =>
@@ -28,29 +30,25 @@ export default function LoginScreen() {
                     : value.length < 6 && "Password must be 6 length",
         },
     });
+ const router = useRouter();
 
-    const handleSubmit = async ({
-        email,
-        password,
-    }: {
-        email: string;
-        password: string;
-    }) => {
-        try {
-            const res = await api.post("/auth/login", { email, password });
-            console.log(res.data);
-            setError("");
-        } catch (error) {
-            if (error instanceof AxiosError) {
-                let message =
-                    error.response?.data.error ||
-                    error.message ||
-                    "Something went wrong";
-                toast.error(message);
-                setError(message);
-            }
-        }
-    };
+    const { mutate, error } = useMutation({
+        mutationKey: ["login"],
+        mutationFn: async (values: typeof form.values) => {
+            return await api.post("/auth/login", values);
+        },
+        onError(error) {
+            toast.error(error.message);
+        },
+        onSuccess(data) {
+            let info = data.data.data;
+            localStorage.setItem("token", info.token);
+            localStorage.setItem("user", info.user);
+            toast.success(`Welcome back ${info.user.firstName} ${info.user.lastName}`);
+            router.push('/dashboard/overview');
+        },
+    });
+
 
     return (
         <div className="flex justify-center items-center min-h-screen">
@@ -63,7 +61,9 @@ export default function LoginScreen() {
                 </div>
                 <form
                     className="space-y-3"
-                    onSubmit={form.onSubmit(handleSubmit)}
+                    onSubmit={form.onSubmit((values) => {
+                        mutate(values);
+                    })}
                 >
                     <TextInput
                         withAsterisk
@@ -86,7 +86,7 @@ export default function LoginScreen() {
                         }
                     />
                     <div className=" space-y-2">
-                        <p className="text-center text-red-500">{error}</p>
+                        <p className="text-center text-red-500">{error?.message}</p>
                         <Button fullWidth type="submit">
                             Login
                         </Button>
