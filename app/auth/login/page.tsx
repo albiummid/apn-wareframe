@@ -2,6 +2,7 @@
 import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import axios from "axios";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function LoginScreen() {
@@ -18,7 +19,8 @@ export default function LoginScreen() {
         password: string;
     }) => {
         console.log(values);
-        
+        // const res = await axios.post('/login', FormData); // adjust endpoint
+        // const { token } = res.data;
     };
     return (
         <div className="flex justify-center items-center min-h-screen">
