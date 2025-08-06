@@ -1,17 +1,19 @@
 "use client";
-import { AppShell, Burger, Button, Flex, Group, NavLink, Text } from "@mantine/core";
+import { AppShell, Box, Button, NavLink } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { FaChartPie, FaDatabase, FaUncharted } from "react-icons/fa";
 import { FaBucket } from "react-icons/fa6";
-import { SiAmazonec2 } from "react-icons/si";
 import { GiNetworkBars } from "react-icons/gi";
+import { RiSideBarFill, RiSideBarLine } from "react-icons/ri";
+import { SiAmazonec2 } from "react-icons/si";
 import DashboardHeader from "./dashboard-header";
 import NotificationBar from "./natification-bar";
 
 export default function DashboardLayout(props: PropsWithChildren) {
     const [opened, { toggle }] = useDisclosure(true);
+    const [mobileO, { toggle: toggleMobile }] = useDisclosure(false);
     const router = useRouter();
     const pathname = usePathname();
 
@@ -107,15 +109,24 @@ export default function DashboardLayout(props: PropsWithChildren) {
             navbar={{
                 width: 300,
                 breakpoint: "sm",
-                collapsed: { mobile: !opened, desktop: !opened },
+                collapsed: { mobile: !mobileO, desktop: !opened },
             }}
             padding="md"
         >
-
-
             <AppShell.Navbar>
-
-                <AppShell.Section p="md" className="flex justify-center">
+                <AppShell.Section
+                    p="md"
+                    className="flex items-center justify-between"
+                >
+                    <Box hiddenFrom="sm">
+                        <div onClick={toggleMobile} className="cursor-pointer">
+                            {mobileO ? (
+                                <RiSideBarFill size={30} />
+                            ) : (
+                                <RiSideBarLine size={30} />
+                            )}
+                        </div>
+                    </Box>
                     <p className="text-2xl font-bold">BetopiaCloud</p>
                 </AppShell.Section>
 
@@ -160,16 +171,18 @@ export default function DashboardLayout(props: PropsWithChildren) {
                     <Button>SignOut</Button>
                 </AppShell.Section>
             </AppShell.Navbar>
-            <AppShell.Main >
-                <DashboardHeader opened={opened} toggle={toggle} />
+            <AppShell.Main>
+                <DashboardHeader
+                    opened={opened}
+                    toggle={() => {
+                        toggle();
+                        toggleMobile();
+                    }}
+                />
                 <div className="flex items-center">
-                    <div>
-                        {props.children}
-                    </div>
+                    <div>{props.children}</div>
                     <NotificationBar />
                 </div>
-
-
             </AppShell.Main>
         </AppShell>
     );
