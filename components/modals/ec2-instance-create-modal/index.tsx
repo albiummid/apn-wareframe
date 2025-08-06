@@ -6,11 +6,10 @@ import InstanceTypes from "./instance-type";
 import KeyPair from "./keypair";
 import NameAndTag from "./name-tag";
 import OSImageSelection from "./os-image-selection";
-import StorageVolume from "./storage-volume";
-import Summary from "./summary";
 
 // States
 type TState = {
+    opened: boolean;
     errors: {
         name?: string;
     };
@@ -31,6 +30,7 @@ type TState = {
 };
 
 export const useEC2CreationState = create<TState>((set, get) => ({
+    opened: false,
     name: "",
     tags: [],
     osImage: {
@@ -42,40 +42,26 @@ export const useEC2CreationState = create<TState>((set, get) => ({
         label: "",
         value: "",
     },
-    sectionEnabledTill: 1,
+    sectionEnabledTill: 3,
     activeSections: ["1"],
     errors: {},
     setState(state) {
-        let errors = {
-            ...get().errors,
-        };
-        // if (Object.keys(get().errors).length > 0) {
-        //     let entries = Object.entries(state);
-
-        //     entries.forEach(([k, v]) => {
-        //         if (v && k in errors) {
-        //             delete errors[k as keyof TState["errors"]];
-        //         }
-        //     });
-        // }
         set({ ...get(), ...state });
     },
 }));
 
 // Component
-export default function EC2InstanceModal({
-    opened,
-    onClose,
-}: {
-    opened: boolean;
-    onClose: () => void;
-}) {
-    const { sectionEnabledTill, activeSections, setState } =
+export default function EC2InstanceModal({ onClose }: { onClose: () => void }) {
+    const { sectionEnabledTill, opened, activeSections, setState } =
         useEC2CreationState();
     const accordionList = [
         {
             label: "Name and Tags",
             component: <NameAndTag />,
+        },
+        {
+            label: "Key Pairs",
+            component: <KeyPair />,
         },
         {
             label: "Application and OS Image (Amazon Machine Image)",
@@ -84,18 +70,6 @@ export default function EC2InstanceModal({
         {
             label: "Instance Type",
             component: <InstanceTypes />,
-        },
-        {
-            label: "Key Pairs",
-            component: <KeyPair />,
-        },
-        {
-            label: "StorageVolume",
-            component: <StorageVolume />,
-        },
-        {
-            label: "Summary",
-            component: <Summary />,
         },
     ];
 

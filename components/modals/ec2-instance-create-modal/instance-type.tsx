@@ -1,6 +1,11 @@
-import { Stack } from "@mantine/core";
+import TerminalSimulator from "@/components/terminal";
+import { Button, Modal, Stack } from "@mantine/core";
+import { useState } from "react";
+import { useEC2CreationState } from ".";
 
 export default function InstanceTypes() {
+    const { setState } = useEC2CreationState();
+    const [opened, setOpened] = useState(false);
     return (
         <Stack>
             <div className="space-y-3">
@@ -33,6 +38,25 @@ export default function InstanceTypes() {
                     </div>
                 </div>
             </div>
+
+            <Button
+                mt={10}
+                onClick={() => {
+                    setOpened(true);
+                }}
+            >
+                Launch Instance
+            </Button>
+            <Modal
+                withCloseButton={false}
+                opened={opened}
+                onClose={() => {
+                    setOpened(false);
+                }}
+            >
+                <p className="text-center text-lg mb-5">Creating instance</p>
+                <TerminalSimulator />
+            </Modal>
         </Stack>
     );
 }
