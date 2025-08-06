@@ -132,25 +132,25 @@ export default function Page() {
                             </Menu.Target>
                             <Menu.Dropdown>
                                 <Menu.Label>State actions</Menu.Label>
-                                {stateActions.map((x) => (
+                                {stateActions.map((x, i) => (
                                     <Menu.Item
                                         disabled={x?.disabled}
                                         onClick={() => {
                                             x.action();
                                         }}
-                                        key={x.label}
+                                        key={i}
                                     >
                                         {x.label}
                                     </Menu.Item>
                                 ))}
                                 <Menu.Label>Instance actions</Menu.Label>
-                                {instanceActions.map((x) => (
+                                {instanceActions.map((x, y) => (
                                     <Menu.Item
                                         disabled={x?.disabled}
                                         onClick={() => {
                                             x.action();
                                         }}
-                                        key={x.label}
+                                        key={y}
                                         color={x?.color}
                                     >
                                         {x.label}

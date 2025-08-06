@@ -8,8 +8,6 @@ export default function IndexPage() {
     const router = useRouter();
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
-
         const authInfo = localStorage.getItem("auth");
         setAuthenticated(!!authInfo);
         router.push(!!authInfo ? "/dashboard/ec2" : "/auth/login");

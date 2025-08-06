@@ -1,3 +1,4 @@
+"use client";
 import {
     BoxProps,
     Checkbox,
@@ -60,13 +61,14 @@ export default function TurboTable<Item extends {} & { _id: string }>({
     labelAlign = "center",
     contentAlign = "center",
     selectedRows,
-    setSelectedRows,
     pagination,
     searchEnabled = false,
     searchPlaceholder = "Search...",
     onSearch,
     bulkActions,
     loading = false,
+    onRowSelect = () => {},
+    setSelectedRows = () => {},
     ...tableProps
 }: TurboTableProps<Item>) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -99,6 +101,27 @@ export default function TurboTable<Item extends {} & { _id: string }>({
             <span className=" font-semibold ">{c.label}</span>
         </Table.Th>
     ));
+
+    if (selectionEnabled) {
+        headerRow.unshift(
+            <Table.Th
+                key={"checkbox-th"}
+                w={10}
+                className="border border-t border-gray-300 border-b-0"
+            >
+                <Checkbox
+                    aria-label="Select row"
+                    checked={
+                        selectedRows?.length === data.length && data.length > 0
+                    }
+                    onChange={(event) => {
+                        let all = selectedRows?.length === data.length;
+                        setSelectedRows?.(all ? [] : data?.map((x) => x._id));
+                    }}
+                />
+            </Table.Th>
+        );
+    }
 
     const rows = data?.map((item, index, array) => {
         const _columns = columns?.map((c) => {
@@ -144,8 +167,8 @@ export default function TurboTable<Item extends {} & { _id: string }>({
                                 aria-label="Select row"
                                 checked={selectedRows?.includes(item._id)}
                                 onChange={(event) => {
-                                    tableProps?.onRowSelect?.(item);
-                                    setSelectedRows?.(
+                                    onRowSelect(item);
+                                    setSelectedRows(
                                         event.currentTarget.checked
                                             ? [item._id].concat(selectedRows)
                                             : selectedRows?.filter(
@@ -200,33 +223,7 @@ export default function TurboTable<Item extends {} & { _id: string }>({
                     withTableBorder
                 >
                     <Table.Thead style={{ backgroundColor: "gray" }}>
-                        <>
-                            {selectionEnabled && (
-                                <Table.Th
-                                    w={10}
-                                    className="border border-t border-gray-300 border-b-0"
-                                >
-                                    <Checkbox
-                                        aria-label="Select row"
-                                        checked={
-                                            selectedRows?.length ===
-                                                data.length && data.length > 0
-                                        }
-                                        onChange={(event) => {
-                                            let all =
-                                                selectedRows?.length ===
-                                                data.length;
-                                            setSelectedRows?.(
-                                                all
-                                                    ? []
-                                                    : data?.map((x) => x._id)
-                                            );
-                                        }}
-                                    />
-                                </Table.Th>
-                            )}
-                        </>
-                        {headerRow}
+                        <Table.Tr>{headerRow}</Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
                         {loading ? (
