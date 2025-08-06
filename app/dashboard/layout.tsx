@@ -118,15 +118,15 @@ export default function DashboardLayout(props: PropsWithChildren) {
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar>
-                {navSections.map((section) => {
+                {navSections.map((section, i) => {
                     return (
-                        <AppShell.Section key={section.label}>
+                        <AppShell.Section key={i}>
                             <NavLink
                                 leftSection={section.icon}
                                 label={section.label}
                             >
                                 <>
-                                    {section.links.map((item) => {
+                                    {section.links.map((item, i) => {
                                         const isActive = pathname.includes(
                                             item.link
                                         );
@@ -134,7 +134,7 @@ export default function DashboardLayout(props: PropsWithChildren) {
                                             <NavLink
                                                 leftSection={item.icon}
                                                 disabled={item?.disabled}
-                                                key={item.link}
+                                                key={i}
                                                 active={isActive}
                                                 label={item.label}
                                                 onClick={() => {

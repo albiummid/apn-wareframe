@@ -151,9 +151,9 @@ const QuickStart = () => {
         <div className="">
             <ScrollArea scrollbars="x" className="">
                 <Flex gap={10} py={20}>
-                    {osList.map((x) => (
+                    {osList.map((x, y) => (
                         <OSCard
-                            key={x.label}
+                            key={y}
                             imagePath={x.imagePath}
                             label={x.label}
                             onPick={() => {

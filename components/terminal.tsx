@@ -1,4 +1,5 @@
-import { Box, Paper, ScrollArea, Text } from "@mantine/core";
+"use client";
+import { Paper, ScrollArea, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useEC2CreationState } from "./modals/ec2-instance-create-modal";
 
@@ -52,11 +53,11 @@ const TerminalSimulator = () => {
             }}
         >
             <ScrollArea style={{ height: "100%" }}>
-                <Box>
+                <div>
                     {visibleLines.map((line, i) => (
                         <Text key={i}>{line}</Text>
                     ))}
-                </Box>
+                </div>
             </ScrollArea>
         </Paper>
     );
