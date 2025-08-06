@@ -83,7 +83,7 @@ export default function EC2InstanceModal() {
     }, [sectionEnabledTill]);
 
     const onClose = () => {
-        setState({ opened: false });
+        setState({ opened: false, name: "" });
     };
 
     return (

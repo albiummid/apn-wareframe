@@ -9,7 +9,6 @@ import { GiNetworkBars } from "react-icons/gi";
 import { RiSideBarFill, RiSideBarLine } from "react-icons/ri";
 import { SiAmazonec2 } from "react-icons/si";
 import DashboardHeader from "./dashboard-header";
-import NotificationBar from "./natification-bar";
 
 export default function DashboardLayout(props: PropsWithChildren) {
     const [opened, { toggle }] = useDisclosure(true);
@@ -179,10 +178,7 @@ export default function DashboardLayout(props: PropsWithChildren) {
                         toggleMobile();
                     }}
                 />
-                <div className="flex items-center">
-                    <div>{props.children}</div>
-                    <NotificationBar />
-                </div>
+                <div>{props.children}</div>
             </AppShell.Main>
         </AppShell>
     );
