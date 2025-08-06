@@ -1,5 +1,5 @@
 "use client";
-import { AppShell, Burger, Button, Group, NavLink } from "@mantine/core";
+import { AppShell, Burger, Button, Flex, Group, NavLink, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
@@ -7,9 +7,11 @@ import { FaChartPie, FaDatabase, FaUncharted } from "react-icons/fa";
 import { FaBucket } from "react-icons/fa6";
 import { SiAmazonec2 } from "react-icons/si";
 import { GiNetworkBars } from "react-icons/gi";
+import DashboardHeader from "./dashboard-header";
+import NotificationBar from "./natification-bar";
 
 export default function DashboardLayout(props: PropsWithChildren) {
-    const [opened, { toggle }] = useDisclosure();
+    const [opened, { toggle }] = useDisclosure(true);
     const router = useRouter();
     const pathname = usePathname();
 
@@ -50,7 +52,7 @@ export default function DashboardLayout(props: PropsWithChildren) {
                     label: "Networks",
                     link: "/networks",
                     disabled: true,
-                    icon: <GiNetworkBars/>,
+                    icon: <GiNetworkBars />,
                 },
             ],
         },
@@ -102,28 +104,21 @@ export default function DashboardLayout(props: PropsWithChildren) {
 
     return (
         <AppShell
-            header={{ height: 60 }}
             navbar={{
                 width: 300,
                 breakpoint: "sm",
-                collapsed: { mobile: !opened },
+                collapsed: { mobile: !opened, desktop: !opened },
             }}
             padding="md"
         >
-            <AppShell.Header>
-                <Group h="100%" px="md">
-                    <Burger
-                        opened={opened}
-                        onClick={toggle}
-                        hiddenFrom="sm"
-                        size="sm"
-                    />
-                    <p className="text-lg font-bold text-cyan-600">
-                        BetopiaCloud
-                    </p>
-                </Group>
-            </AppShell.Header>
+
+
             <AppShell.Navbar>
+
+                <AppShell.Section p="md" className="flex justify-center">
+                    <p className="text-2xl font-bold">BetopiaCloud</p>
+                </AppShell.Section>
+
                 {navSections.map((section, i) => {
                     return (
                         <AppShell.Section key={i}>
@@ -165,7 +160,17 @@ export default function DashboardLayout(props: PropsWithChildren) {
                     <Button>SignOut</Button>
                 </AppShell.Section>
             </AppShell.Navbar>
-            <AppShell.Main>{props.children}</AppShell.Main>
+            <AppShell.Main >
+                <DashboardHeader opened={opened} toggle={toggle} />
+                <div className="flex items-center">
+                    <div>
+                        {props.children}
+                    </div>
+                    <NotificationBar />
+                </div>
+
+
+            </AppShell.Main>
         </AppShell>
     );
 }
