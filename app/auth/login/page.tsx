@@ -4,6 +4,7 @@ import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { AxiosError } from "axios";
+import Link from "next/link";
 import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -91,7 +92,14 @@ export default function LoginScreen() {
                         </Button>
                     </div>
 
-                    <p></p>
+                    <p className=" text-sm text-center">
+                        No account ?{" "}
+                        <Link href={"/auth/register"}>
+                            <span className="underline cursor-pointer">
+                                create one
+                            </span>
+                        </Link>
+                    </p>
                 </form>
             </div>
         </div>
