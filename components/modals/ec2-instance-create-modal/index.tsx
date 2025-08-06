@@ -43,7 +43,7 @@ export const useEC2CreationState = create<TState>((set, get) => ({
         value: "",
     },
     sectionEnabledTill: 3,
-    activeSections: ["1"],
+    activeSections: ["1", "2", "3"],
     errors: {},
     setState(state) {
         set({ ...get(), ...state });
@@ -51,9 +51,10 @@ export const useEC2CreationState = create<TState>((set, get) => ({
 }));
 
 // Component
-export default function EC2InstanceModal({ onClose }: { onClose: () => void }) {
+export default function EC2InstanceModal() {
     const { sectionEnabledTill, opened, activeSections, setState } =
         useEC2CreationState();
+
     const accordionList = [
         {
             label: "Name and Tags",
@@ -81,11 +82,13 @@ export default function EC2InstanceModal({ onClose }: { onClose: () => void }) {
         }
     }, [sectionEnabledTill]);
 
+    const onClose = () => {
+        setState({ opened: false });
+    };
+
     return (
         <Drawer
-            // withCloseButton={false}
             position="right"
-            // size={"xl"}
             size={"xl"}
             opened={opened}
             onClose={onClose}
@@ -103,7 +106,11 @@ export default function EC2InstanceModal({ onClose }: { onClose: () => void }) {
                 chevronIconSize={23}
             >
                 {accordionList.map((x, i) => (
-                    <Accordion.Item key={x.label} value={String(i + 1)}>
+                    <Accordion.Item
+                        key={x.label}
+                        id={"ac_" + String(i + 1)}
+                        value={String(i + 1)}
+                    >
                         <Accordion.Control
                             disabled={i + 1 > sectionEnabledTill}
                             className=""

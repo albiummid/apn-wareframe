@@ -1,6 +1,7 @@
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import type { Metadata } from "next";
+import { Bounce, ToastContainer } from "react-toastify";
 import "./globals.css";
 
 import {
@@ -31,6 +32,19 @@ export default function RootLayout({
                 <ColorSchemeScript />
             </head>
             <body>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                    transition={Bounce}
+                />
                 <MantineProvider theme={theme}>{children}</MantineProvider>
             </body>
         </html>

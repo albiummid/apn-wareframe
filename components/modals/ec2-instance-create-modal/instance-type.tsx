@@ -1,5 +1,5 @@
 import TerminalSimulator from "@/components/terminal";
-import { Button, Modal, Stack } from "@mantine/core";
+import { Button, Stack } from "@mantine/core";
 import { useState } from "react";
 import { useEC2CreationState } from ".";
 
@@ -42,21 +42,18 @@ export default function InstanceTypes() {
             <Button
                 mt={10}
                 onClick={() => {
-                    setOpened(true);
+                    setOpened((prv) => !prv);
                 }}
             >
                 Launch Instance
             </Button>
-            <Modal
-                withCloseButton={false}
-                opened={opened}
-                onClose={() => {
-                    setOpened(false);
-                }}
-            >
-                <p className="text-center text-lg mb-5">Creating instance</p>
-                <TerminalSimulator />
-            </Modal>
+            {opened && (
+                <TerminalSimulator
+                    onFinish={() => {
+                        setState({ opened: false });
+                    }}
+                />
+            )}
         </Stack>
     );
 }

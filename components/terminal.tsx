@@ -1,10 +1,9 @@
 "use client";
 import { Paper, ScrollArea, Text } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { useEC2CreationState } from "./modals/ec2-instance-create-modal";
+import { useEffect, useRef, useState } from "react";
 
-const TerminalSimulator = () => {
-    const outputLines = [
+const TerminalSimulator = ({
+    outputLines = [
         "Initializing system...",
         "Checking configuration...",
         "Loading dependencies...",
@@ -12,12 +11,15 @@ const TerminalSimulator = () => {
         "Fetching data...",
         "Running tasks...",
         "Done ✅",
-    ];
-    const { setState, opened } = useEC2CreationState();
-    console.log(opened, "L:L");
-
+    ],
+    onFinish = () => {},
+}: {
+    onFinish: () => void;
+    outputLines?: string[];
+}) => {
     const [visibleLines, setVisibleLines] = useState<string[]>([]);
     const [index, setIndex] = useState(0);
+    const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         let id;
@@ -25,22 +27,32 @@ const TerminalSimulator = () => {
             const timeout = setTimeout(() => {
                 setVisibleLines((prev) => [...prev, outputLines[index]]);
                 setIndex((prev) => {
-                    if (prev + 1 === outputLines.length - 1) {
-                        setState({ opened: false });
-                    }
                     return prev + 1;
                 });
             }, 800); // Time between lines
 
             return () => {
                 clearTimeout(timeout);
-                clearTimeout(id);
             };
         }
     }, [index]);
 
+    useEffect(() => {
+        if (index === outputLines.length - 1) {
+            const id = setTimeout(() => {
+                onFinish();
+                clearTimeout(id);
+            }, 1500);
+        }
+    }, [index]);
+
+    useEffect(() => {
+        ref.current?.scrollIntoView({ behavior: "smooth" });
+    }, [ref.current]);
+
     return (
         <Paper
+            ref={ref}
             shadow="md"
             radius="md"
             p="md"
