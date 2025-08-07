@@ -1,5 +1,6 @@
 "use client";
 import { api } from "@/services/api";
+import { useAppState } from "@/services/states";
 import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -40,7 +41,14 @@ export default function LoginScreen() {
         onSuccess(data) {
             let info = data.data.data;
             localStorage.setItem("token", info.token);
-            localStorage.setItem("user", info.user);
+            localStorage.setItem("user", JSON.stringify(info.user));
+            
+            useAppState.setState({
+                token:info.token,
+                user:info.user,
+                isAuthenticated:true,
+                isLoading:false
+            })
             toast.success(
                 `Welcome back ${info.user.firstName} ${info.user.lastName}`
             );

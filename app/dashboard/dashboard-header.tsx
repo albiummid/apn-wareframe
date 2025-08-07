@@ -1,3 +1,4 @@
+import UButton from "@/components/user-button";
 import { Flex, Text, TextInput, useMantineColorScheme } from "@mantine/core";
 import { spotlight, Spotlight, SpotlightActionData } from "@mantine/spotlight";
 import { BiFile, BiHome, BiSearch } from "react-icons/bi";
@@ -76,6 +77,7 @@ export default function DashboardHeader({
 
                         <PiClockCounterClockwise className="text-2xl" />
                         <FaRegBell className="text-xl" />
+                        <UButton />
                     </div>
                     <Spotlight
                         actions={actions}
