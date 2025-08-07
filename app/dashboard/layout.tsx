@@ -1,8 +1,9 @@
 "use client";
-import { AppShell, Box, NavLink } from "@mantine/core";
+import { useAppState } from "@/services/states";
+import { AppShell, Box, LoadingOverlay, NavLink } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { BiAnalyse } from "react-icons/bi";
 import { FaChartPie, FaDatabase } from "react-icons/fa";
 import { FaBucket } from "react-icons/fa6";
@@ -24,6 +25,8 @@ export default function DashboardLayout(props: PropsWithChildren) {
     const [mobileO, { toggle: toggleMobile }] = useDisclosure(false);
     const router = useRouter();
     const pathname = usePathname();
+
+    const { isLoading, isAuthenticated, user, token } = useAppState();
 
     const navSections = [
         {
@@ -111,6 +114,17 @@ export default function DashboardLayout(props: PropsWithChildren) {
             ],
         },
     ];
+
+    console.log(user, token);
+
+    useEffect(() => {
+        if (!isLoading && !isAuthenticated) {
+            router.push("/auth/login");
+        }
+    }, [isLoading, isAuthenticated]);
+
+    if (isLoading) return <LoadingOverlay />;
+    if (!isAuthenticated) return null;
 
     return (
         <AppShell
