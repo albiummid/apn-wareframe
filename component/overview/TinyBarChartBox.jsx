@@ -2,7 +2,8 @@
 
 import React from 'react'
 import { GoDotFill } from 'react-icons/go';
-import { BarChart } from '@mantine/charts';
+import { BarChart, CompositeChart, RadialBarChart } from '@mantine/charts';
+
 
 
 
@@ -18,10 +19,10 @@ const data = [
 ];
 
 const data1 = [
-    { name: 'USA', value: 400, color: 'indigo.6' },
-    { name: 'India', value: 300, color: 'yellow.6' },
-    { name: 'Japan', value: 300, color: 'teal.6' },
-    { name: 'Other', value: 200, color: 'gray.6' },
+    { name: 'United States', value: 400, color: 'black.6' },
+    { name: 'Canada', value: 300, color: 'blue.6' },
+    { name: 'Mexico', value: 300, color: 'green.6' },
+    { name: 'Other', value: 200, color: 'red.6' },
 ];
 
 
@@ -82,9 +83,8 @@ const TinyBarChartBox = () => {
                 <div className='w-full h-75 bg-[#F9F9FA] py-4 px-4 rounded-2xl mt-8'>
                     <h1>Traffic by Device</h1>
                     <div className='items-center'>
-
                         <BarChart
-                            h={250}
+                            h={240}
                             data={data}
                             dataKey="month"
                             type="stacked"
@@ -102,8 +102,8 @@ const TinyBarChartBox = () => {
                     <h1>Traffic by Device</h1>
                     <div className='grid grid-cols-2 gap-10 items-center justify-between  '>
                         <div>
-                            <PieChart size={160} data={data1} />
-                            dhhd
+                            <RadialBarChart data={data1} dataKey="value" h={280} withLabels />;
+
 
                         </div>
                         <div>
