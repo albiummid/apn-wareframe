@@ -112,10 +112,10 @@ export default function TurboTable<Item extends {} & { _id: string }>({
                 <Checkbox
                     aria-label="Select row"
                     checked={
-                        selectedRows?.length === data.length && data.length > 0
+                        selectedRows?.length === data?.length && data.length > 0
                     }
                     onChange={(event) => {
-                        let all = selectedRows?.length === data.length;
+                        let all = selectedRows?.length === data?.length;
                         setSelectedRows?.(all ? [] : data?.map((x) => x._id));
                     }}
                 />

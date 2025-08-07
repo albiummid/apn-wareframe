@@ -1,6 +1,8 @@
 import { Group, Radio, Stack, TextInput } from "@mantine/core";
+import { useEC2CreationState } from ".";
 
 export default function KeyPair() {
+    const { keyPair, setState } = useEC2CreationState();
     return (
         <Stack>
             <p>
@@ -10,15 +12,33 @@ export default function KeyPair() {
             </p>
             <TextInput
                 label="Name"
+                value={keyPair.name}
+                onChange={(e) => {
+                    setState({ keyPair: { ...keyPair, name: e.target.value } });
+                }}
                 description="The name can include up to 255 ASCII characters. It can't include leading or trailing spaces."
             />
-            <Radio.Group label="Key pair type" defaultValue={"rsa"}>
+            <Radio.Group
+                value={keyPair.type}
+                onChange={(e) => {
+                    setState({ keyPair: { ...keyPair, type: e } });
+                }}
+                label="Key pair type"
+                defaultValue={"rsa"}
+            >
                 <Group mt="xs">
                     <Radio value="rsa" label="RSA" />
                     <Radio value="ed25519" label="ED25519" />
                 </Group>
             </Radio.Group>
-            <Radio.Group label="Private key file format" defaultValue={".ppm"}>
+            <Radio.Group
+                value={keyPair.format}
+                onChange={(e) => {
+                    setState({ keyPair: { ...keyPair, format: e } });
+                }}
+                label="Private key file format"
+                defaultValue={".ppm"}
+            >
                 <Group mt="xs">
                     <Radio
                         value="pem"

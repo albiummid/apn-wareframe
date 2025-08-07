@@ -4,11 +4,8 @@ import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { log } from "console";
 import Link from "next/link";
-import {  useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
 
@@ -30,7 +27,7 @@ export default function LoginScreen() {
                     : value.length < 6 && "Password must be 6 length",
         },
     });
- const router = useRouter();
+    const router = useRouter();
 
     const { mutate, error } = useMutation({
         mutationKey: ["login"],
@@ -44,11 +41,12 @@ export default function LoginScreen() {
             let info = data.data.data;
             localStorage.setItem("token", info.token);
             localStorage.setItem("user", info.user);
-            toast.success(`Welcome back ${info.user.firstName} ${info.user.lastName}`);
-            router.push('/dashboard/overview');
+            toast.success(
+                `Welcome back ${info.user.firstName} ${info.user.lastName}`
+            );
+            router.push("/dashboard/overview");
         },
     });
-
 
     return (
         <div className="flex justify-center items-center min-h-screen">
@@ -86,7 +84,9 @@ export default function LoginScreen() {
                         }
                     />
                     <div className=" space-y-2">
-                        <p className="text-center text-red-500">{error?.message}</p>
+                        <p className="text-center text-red-500">
+                            {error?.message}
+                        </p>
                         <Button fullWidth type="submit">
                             Login
                         </Button>
