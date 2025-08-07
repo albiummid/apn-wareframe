@@ -61,7 +61,7 @@ const LineChartView = () => {
 
 
   return (
-    <div className='w-full h-83 md:flex md:flex-wrap items-center justify-between mb-2 mt-2'>
+    <div className='w-full md:flex md:flex-wrap items-center justify-between my-2 gap-5'>
 
       <div className='w-100 md:w-200 h-89 bg-[#F9F9FA] rounded-2xl'>
         <div className='   flex flex-wrap  py-4 px-5 gap-4  items-center'>
@@ -81,7 +81,7 @@ const LineChartView = () => {
             </ul>
           </div>
         </div>
-        <div className='w-100 xl:w-full h-80'>
+        <div className='w-100 xl:w-full h-80 '>
           <AreaChart
             h={275}
             data={data}
@@ -99,7 +99,7 @@ const LineChartView = () => {
       </div>
 
       {/*  */}
-      <div className='w-70 h-85 bg-[#F9F9FA] rounded-2xl  py-4 px-5 '>
+      <div className='w-70 h-85 bg-[#F9F9FA] rounded-2xl my-5 '>
         <h1 className='text-center py-3 text-base font-semibold tracking-wide leading-2'>Traffic by Website</h1>
 
 

@@ -6,9 +6,8 @@ import NotificationBar from "../natification-bar";
 
 export default function Overview() {
     return (
-        <div className="flex flex-wrap gap-8 justify-between items-start w-full h-full">
-            <div>
-          
+        <div className="flex flex-wrap  gap-4 xl:gap-8 justify-between  w-full h-full">
+            <div className="flex flex-col gap-5" >
                 <Views />
                 <LineChartView />
                 <TinyBarChartBox    />
