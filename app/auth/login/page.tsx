@@ -13,8 +13,8 @@ export default function LoginScreen() {
     const [passwordShown, { toggle }] = useDisclosure();
     const form = useForm({
         initialValues: {
-            email: "tanvir@gmail.com",
-            password: "123456789",
+            email: "",
+            password: "",
         },
         validate: {
             email: (value) =>
