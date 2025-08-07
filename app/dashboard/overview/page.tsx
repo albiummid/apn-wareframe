@@ -6,7 +6,7 @@ import NotificationBar from "../natification-bar";
 
 export default function Overview() {
     return (
-        <div className="flex flex-wrap lg:flex-nowrap lg:gap-4 xl:gap-8 justify-between items-start w-full h-full">
+        <div className="flex flex-wrap gap-8 justify-between items-start w-full h-full">
             <div>
           
                 <Views />
