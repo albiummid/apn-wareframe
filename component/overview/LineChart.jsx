@@ -6,48 +6,13 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 import { AreaChart } from '@mantine/charts';
 
 const data = [
-  {
-    name: 'Jan',
-    uv: 10000,
-    pv: 0,
-    amt: 2210,
-  },
-  {
-    name: 'Feb',
-    uv: 2000,
-    pv: 5098,
-    amt: 2210,
-  },
-  {
-    name: 'Mar',
-    uv: 300,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Apr',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'May',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Jun',
-    uv: 2390,
-    pv: 3880,
-    amt: 2500,
-  },
-  {
-    name: 'Jul',
-    uv: 3050,
-    pv: 4300,
-    amt: 2100,
-  },
+  { name: 'Page A', uv: 4000, pv: 2400 },
+  { name: 'Page B', uv: 3000, pv: 1398 },
+  { name: 'Page C', uv: 2000, pv: 9800 },
+  { name: 'Page D', uv: 2780, pv: 3908 },
+  { name: 'Page E', uv: 1890, pv: 4800 },
+  { name: 'Page F', uv: 2390, pv: 3800 },
+  { name: 'Page G', uv: 3490, pv: 4300 }
 ];
 
 const StatCard = ({ label }) => {
@@ -67,42 +32,58 @@ const StatCard = ({ label }) => {
 const LineChartView = () => {
 
   const statList = [
-    { name: 'Page A', uv: 4000, pv: 2400 },
-    { name: 'Page B', uv: 3000, pv: 1398 },
-    { name: 'Page C', uv: 2000, pv: 9800 },
-    { name: 'Page D', uv: 2780, pv: 3908 },
-    { name: 'Page E', uv: 1890, pv: 4800 },
-    { name: 'Page F', uv: 2390, pv: 3800 },
-    { name: 'Page G', uv: 3490, pv: 4300 },
+    {
+
+      label: "goolge",
+    },
+    {
+
+      label: "YouTube",
+    },
+    {
+
+      label: "Instagram",
+    },
+    {
+
+      label: "Pinterest",
+    },
+    {
+
+      label: "Facebook",
+    },
+    {
+
+      label: "Twitter",
+    },
 
   ]
 
 
   return (
-    <div className=' xl:w-full h-83 grid grid-cols-1 
-    xl:grid-cols-2 items-center justify-between mb-2 mt-2'>
+    <div className='w-full h-83 md:flex md:flex-wrap items-center justify-between mb-2 mt-2'>
 
-      <div className=' xl:w-200 h-89 bg-[#F9F9FA] rounded-2xl'>
-        <div className='flex flex-wrap  py-4 px-5 gap-4  items-center'>
+      <div className='w-100 md:w-200 h-89 bg-[#F9F9FA] rounded-2xl'>
+        <div className='   flex flex-wrap  py-4 px-5 gap-4  items-center'>
           <h1 className='text-[14px] xl:text-[16px] '>Total Users</h1>
           <h1 className='text-[14px] xl:text-[16px] text-gray-300'>Total Projects</h1>
           <h1 className='text-[14px] xl:text-[16px] text-gray-300'>Operating Status</h1>
-          <div className=' xl:px-8 '>
-            <ul className=' flex  gap-4 xl:gap-8 justify-between  items-center'>
+          <div className=' px-8 '>
+            <ul className=' flex   gap-8 justify-between  items-center'>
               <li className='flex items-center gap-2'>
                 <GoDotFill />
-                <span className='text-[12px] xl:text-[16px]'>This year</span>
+                <span className='text-[10px] xl:text-[16px]'>This year</span>
               </li>
               <li className='flex items-center gap-2'>
                 <GoDotFill className='text-[#AEC7ED]' />
-                <span className='text-[12px] xl:text-[16px]'>Lest year</span>
+                <span className='text-[10px] xl:text-[16px]'>Lest year</span>
               </li>
             </ul>
           </div>
         </div>
-        <div className='w-100 xl:w-150 h-80'>
+        <div className='w-100 xl:w-full h-80'>
           <AreaChart
-            h={250}
+            h={275}
             data={data}
             dataKey="name"
             withRightYAxis
