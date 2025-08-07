@@ -14,6 +14,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { GrOverview, GrUserAdmin } from "react-icons/gr";
 import { IoMdAnalytics } from "react-icons/io";
 
+
 export default function DashboardLayout(props: PropsWithChildren) {
     const [opened, { toggle }] = useDisclosure(true);
     const [mobileO, { toggle: toggleMobile }] = useDisclosure(false);
