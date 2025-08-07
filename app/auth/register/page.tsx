@@ -14,14 +14,13 @@ export default function RegisterScreen() {
     const [confirmPasswordShown, { toggle: toggleConfirmPasswordShown }] =
         useDisclosure(false);
 
-        
     const form = useForm({
         initialValues: {
-            firstName: "Albi",
-            lastName: "Ummid",
-            email: "albi.ummid@gmail.com",
-            password: "albiummidtanvir",
-            confirmPassword: "albiummidtanvir",
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
         },
         validate: {
             firstName: (value) =>
