@@ -178,7 +178,7 @@ export default function DashboardLayout(props: PropsWithChildren) {
                         toggleMobile();
                     }}
                 />
-                <div>{props.children}</div>
+                <div className="p-5">{props.children}</div>
             </AppShell.Main>
         </AppShell>
     );

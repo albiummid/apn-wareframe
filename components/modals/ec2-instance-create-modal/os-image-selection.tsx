@@ -158,7 +158,7 @@ const QuickStart = () => {
                     placeholder="Select Architecture"
                     label="Architecture"
                     data={archList}
-                    value={osArch.value}
+                    value={osArch?.value}
                     onChange={(value) => {
                         setState({
                             osArch: archList.find((x) => x.value === value),

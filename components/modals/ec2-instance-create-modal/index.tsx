@@ -20,6 +20,11 @@ type TState = {
         imagePath: string;
         description: string;
     };
+    keyPair: {
+        name: string;
+        type: string;
+        format: string;
+    };
     osArch: {
         label: string;
         value: string;
@@ -27,9 +32,10 @@ type TState = {
     sectionEnabledTill: number;
     activeSections: string[];
     setState: (state: Omit<Partial<TState>, "setState">) => void;
+    reset: () => void;
 };
 
-export const useEC2CreationState = create<TState>((set, get) => ({
+const initialState = {
     opened: false,
     name: "",
     tags: [],
@@ -42,17 +48,29 @@ export const useEC2CreationState = create<TState>((set, get) => ({
         label: "",
         value: "",
     },
+    keyPair: {
+        name: "",
+        type: "rsa",
+        format: ".ppm",
+    },
     sectionEnabledTill: 4,
     activeSections: ["1", "2", "3"],
     errors: {},
+};
+
+export const useEC2CreationState = create<TState>((set, get) => ({
+    ...initialState,
     setState(state) {
         set({ ...get(), ...state });
+    },
+    reset: () => {
+        set(initialState);
     },
 }));
 
 // Component
 export default function EC2InstanceModal() {
-    const { sectionEnabledTill, opened, activeSections, setState } =
+    const { sectionEnabledTill, opened, activeSections, setState, reset } =
         useEC2CreationState();
 
     const accordionList = [
@@ -83,7 +101,7 @@ export default function EC2InstanceModal() {
     }, [sectionEnabledTill]);
 
     const onClose = () => {
-        setState({ opened: false, name: "" });
+        reset();
     };
 
     return (

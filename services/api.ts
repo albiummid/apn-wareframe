@@ -19,3 +19,11 @@ api.interceptors.response.use(
         throw err;
     }
 );
+
+api.interceptors.request.use((req) => {
+    let token = localStorage.getItem("token");
+    if (token) {
+        req.headers.Authorization = `Bearer ${token}`;
+    }
+    return req;
+});
