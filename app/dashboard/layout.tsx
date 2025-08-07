@@ -1,18 +1,23 @@
 "use client";
-import { AppShell, Box, Button, NavLink } from "@mantine/core";
+import { AppShell, Box, NavLink } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
-import { FaChartPie, FaDatabase, FaUncharted } from "react-icons/fa";
+import { BiAnalyse } from "react-icons/bi";
+import { FaChartPie, FaDatabase } from "react-icons/fa";
 import { FaBucket } from "react-icons/fa6";
 import { GiNetworkBars } from "react-icons/gi";
-import { RiSideBarFill, RiSideBarLine } from "react-icons/ri";
-import { SiAmazonec2, SiCivicrm, SiCoinmarketcap, SiPlausibleanalytics } from "react-icons/si";
-import DashboardHeader from "./dashboard-header";
-import { BiAnalyse } from "react-icons/bi";
-import { IoSettingsOutline } from "react-icons/io5";
 import { GrOverview, GrUserAdmin } from "react-icons/gr";
 import { IoMdAnalytics } from "react-icons/io";
+import { IoSettingsOutline } from "react-icons/io5";
+import { RiSideBarFill, RiSideBarLine } from "react-icons/ri";
+import {
+    SiAmazonec2,
+    SiCivicrm,
+    SiCoinmarketcap,
+    SiPlausibleanalytics,
+} from "react-icons/si";
+import DashboardHeader from "./dashboard-header";
 
 export default function DashboardLayout(props: PropsWithChildren) {
     const [opened, { toggle }] = useDisclosure(true);
@@ -23,12 +28,12 @@ export default function DashboardLayout(props: PropsWithChildren) {
     const navSections = [
         {
             label: "Analytics",
-            icon: <SiPlausibleanalytics  />,
+            icon: <SiPlausibleanalytics />,
             links: [
                 {
                     label: "Overview",
                     link: "/overview",
-                    icon: <IoMdAnalytics  />,
+                    icon: <IoMdAnalytics />,
                 },
             ],
         },
@@ -68,7 +73,7 @@ export default function DashboardLayout(props: PropsWithChildren) {
                 {
                     label: "Overview",
                     link: "/overview",
-                    icon: <SiCivicrm  />,
+                    icon: <SiCivicrm />,
                 },
             ],
         },
@@ -90,7 +95,7 @@ export default function DashboardLayout(props: PropsWithChildren) {
                 {
                     label: "Analysis",
                     link: "/Analysis",
-                    icon: <BiAnalyse  />,
+                    icon: <BiAnalyse />,
                 },
             ],
         },
@@ -108,7 +113,6 @@ export default function DashboardLayout(props: PropsWithChildren) {
     ];
 
     return (
-       
         <AppShell
             navbar={{
                 width: 300,
@@ -168,12 +172,12 @@ export default function DashboardLayout(props: PropsWithChildren) {
                 })}
 
                 {/* Footer */}
-                <AppShell.Section
+                {/* <AppShell.Section
                     className="mt-auto flex justify-center"
                     p="md"
                 >
                     <Button>SignOut</Button>
-                </AppShell.Section>
+                </AppShell.Section> */}
             </AppShell.Navbar>
             <AppShell.Main>
                 <DashboardHeader

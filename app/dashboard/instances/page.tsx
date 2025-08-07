@@ -11,7 +11,12 @@ import { useCallback, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaRotateRight } from "react-icons/fa6";
 
-type TInstanceStatus = "running" | "stopped" | "hibernated" | "rebooting";
+type TInstanceStatus =
+    | "running"
+    | "stopped"
+    | "hibernated"
+    | "rebooting"
+    | "terminated";
 export default function Page() {
     const {
         data,
@@ -41,7 +46,12 @@ export default function Page() {
     const stateActions = [
         {
             label: "Stop instance",
-            disabled: disableByStatus(["rebooting", "stopped"]),
+            disabled: disableByStatus([
+                "rebooting",
+                "stopped",
+                "hibernated",
+                "terminated",
+            ]),
             action: async () => {
                 await api.post(`/ec2/${instanceInfo?._id}`, {
                     status: "stopped",
@@ -67,7 +77,7 @@ export default function Page() {
                 });
                 refetch();
             },
-            disabled: instanceInfo?.status === "rebooting",
+            disabled: disableByStatus(["hibernated", "terminated"]),
         },
         {
             label: "Hibernate instance",
@@ -81,7 +91,7 @@ export default function Page() {
         },
         {
             label: "Terminate instance",
-            disabled: disableByStatus(["rebooting", "stopped"]),
+            disabled: disableByStatus(["rebooting", "stopped", "terminated"]),
             action: async () => {
                 await api.post(`/ec2/${instanceInfo?._id}`, {
                     status: "terminated",
