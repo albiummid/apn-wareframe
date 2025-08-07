@@ -3,7 +3,7 @@
 import React, { use } from 'react'
 import { GoDash, GoDotFill } from 'react-icons/go'
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-
+import { AreaChart } from '@mantine/charts';
 
 const data = [
   {
@@ -55,86 +55,70 @@ const StatCard = ({ label }) => {
   return (
 
     <div>
-      <div className='flex flex-wrap items-center gap-3 px-[15px] py-[6px] '>
+      <div className='grid grid-cols-2 items-center gap-3 px-[15px] py-[6px] '>
         <h5>{label}</h5>
-        <div className='flex flex-wrap '><GoDash className='text-3xl ' /><GoDash className='text-3xl opacity-50' /><GoDash className='text-3xl opacity-20' /></div>
+        <div className='flex flex-wrap items-center '><GoDash className='text-3xl ' /><GoDash className='text-3xl opacity-50' /><GoDash className='text-3xl opacity-20' /></div>
       </div>
     </div>
 
   )
 }
 
-
-
 const LineChartView = () => {
 
   const statList = [
-    {
-
-      label: "goolge",
-    },
-    {
-
-      label: "YouTube",
-    },
-    {
-
-      label: "Instagram",
-    },
-    {
-
-      label: "Pinterest",
-    },
-    {
-
-      label: "Facebook",
-    },
-    {
-
-      label: "Twitter",
-    },
+    { name: 'Page A', uv: 4000, pv: 2400 },
+    { name: 'Page B', uv: 3000, pv: 1398 },
+    { name: 'Page C', uv: 2000, pv: 9800 },
+    { name: 'Page D', uv: 2780, pv: 3908 },
+    { name: 'Page E', uv: 1890, pv: 4800 },
+    { name: 'Page F', uv: 2390, pv: 3800 },
+    { name: 'Page G', uv: 3490, pv: 4300 },
 
   ]
 
 
   return (
-    <div className='w-223 h-83 flex  items-center justify-between mb-2 mt-2'>
+    <div className=' xl:w-full h-83 grid grid-cols-1 
+    xl:grid-cols-2 items-center justify-between mb-2 mt-2'>
 
-      <div className='w-165 h-89 bg-[#F9F9FA] rounded-2xl'>
+      <div className=' xl:w-200 h-89 bg-[#F9F9FA] rounded-2xl'>
         <div className='flex flex-wrap  py-4 px-5 gap-4  items-center'>
-          <h1>Total Users</h1>
-          <h1 className='text-black opacity-30'>Total Projects</h1>
-          <h1 className='text-black opacity-30'>Operating Status</h1>
-          <div className=' px-8 '>
-            <ul className='flex  gap-8 justify-between  items-center'>
+          <h1 className='text-[14px] xl:text-[16px] '>Total Users</h1>
+          <h1 className='text-[14px] xl:text-[16px] text-gray-300'>Total Projects</h1>
+          <h1 className='text-[14px] xl:text-[16px] text-gray-300'>Operating Status</h1>
+          <div className=' xl:px-8 '>
+            <ul className=' flex  gap-4 xl:gap-8 justify-between  items-center'>
               <li className='flex items-center gap-2'>
                 <GoDotFill />
-                <span>This year</span>
+                <span className='text-[12px] xl:text-[16px]'>This year</span>
               </li>
               <li className='flex items-center gap-2'>
                 <GoDotFill className='text-[#AEC7ED]' />
-                <span>Lest year</span>
+                <span className='text-[12px] xl:text-[16px]'>Lest year</span>
               </li>
             </ul>
           </div>
         </div>
-        <div className='w-full h-80'>
-
-          <LineChart width={630} height={300} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-          </LineChart>
+        <div className='w-100 xl:w-150 h-80'>
+          <AreaChart
+            h={250}
+            data={data}
+            dataKey="name"
+            withRightYAxis
+            yAxisLabel="uv"
+            rightYAxisLabel="pv"
+            series={[
+              { name: 'uv', color: 'pink.6' },
+              { name: 'pv', color: 'cyan.6', yAxisId: 'right' },
+            ]}
+          />
 
         </div>
       </div>
 
       {/*  */}
-      <div className='w-51 h-83 bg-[#F9F9FA] rounded-2xl  py-4 '>
+      <div className='w-70 h-85 bg-[#F9F9FA] rounded-2xl  py-4 px-5 '>
         <h1 className='text-center py-3 text-base font-semibold tracking-wide leading-2'>Traffic by Website</h1>
 
 

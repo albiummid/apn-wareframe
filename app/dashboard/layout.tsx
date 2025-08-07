@@ -7,8 +7,12 @@ import { FaChartPie, FaDatabase, FaUncharted } from "react-icons/fa";
 import { FaBucket } from "react-icons/fa6";
 import { GiNetworkBars } from "react-icons/gi";
 import { RiSideBarFill, RiSideBarLine } from "react-icons/ri";
-import { SiAmazonec2 } from "react-icons/si";
+import { SiAmazonec2, SiCivicrm, SiCoinmarketcap, SiPlausibleanalytics } from "react-icons/si";
 import DashboardHeader from "./dashboard-header";
+import { BiAnalyse } from "react-icons/bi";
+import { IoSettingsOutline } from "react-icons/io5";
+import { GrOverview, GrUserAdmin } from "react-icons/gr";
+import { IoMdAnalytics } from "react-icons/io";
 
 export default function DashboardLayout(props: PropsWithChildren) {
     const [opened, { toggle }] = useDisclosure(true);
@@ -19,12 +23,12 @@ export default function DashboardLayout(props: PropsWithChildren) {
     const navSections = [
         {
             label: "Analytics",
-            icon: <FaUncharted />,
+            icon: <SiPlausibleanalytics  />,
             links: [
                 {
                     label: "Overview",
                     link: "/overview",
-                    icon: <FaChartPie />,
+                    icon: <IoMdAnalytics  />,
                 },
             ],
         },
@@ -59,51 +63,52 @@ export default function DashboardLayout(props: PropsWithChildren) {
         },
         {
             label: "CRM",
-            icon: <FaUncharted />,
+            icon: <SiCivicrm />,
             links: [
                 {
                     label: "Overview",
                     link: "/overview",
-                    icon: <FaChartPie />,
+                    icon: <SiCivicrm  />,
                 },
             ],
         },
         {
             label: "Market Place",
-            icon: <FaUncharted />,
+            icon: <SiCoinmarketcap />,
             links: [
                 {
-                    label: "Overview",
+                    label: "Market Overview",
                     link: "/overviedw",
-                    icon: <FaChartPie />,
+                    icon: <GrOverview />,
                 },
             ],
         },
         {
             label: "Reporting Analysis",
-            icon: <FaUncharted />,
+            icon: <BiAnalyse />,
             links: [
                 {
-                    label: "Overview",
-                    link: "/overvieww",
-                    icon: <FaChartPie />,
+                    label: "Analysis",
+                    link: "/Analysis",
+                    icon: <BiAnalyse  />,
                 },
             ],
         },
         {
             label: "Settings and Admin",
-            icon: <FaUncharted />,
+            icon: <IoSettingsOutline />,
             links: [
                 {
-                    label: "Overview",
-                    link: "/overviews",
-                    icon: <FaChartPie />,
+                    label: "Admin",
+                    link: "/Admin",
+                    icon: <GrUserAdmin />,
                 },
             ],
         },
     ];
 
     return (
+       
         <AppShell
             navbar={{
                 width: 300,

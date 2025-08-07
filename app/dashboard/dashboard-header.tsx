@@ -3,17 +3,18 @@ import React from 'react'
 import { BsSlash } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";
 import { RxCountdownTimer } from "react-icons/rx";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaRegBell } from "react-icons/fa";
 import { RiSideBarLine } from "react-icons/ri";
 
 
 import { RiSideBarFill } from "react-icons/ri";
+import { PiClockCounterClockwise } from 'react-icons/pi';
 
 export default function DashboardHeader({ opened, toggle }: { opened: boolean, toggle: () => void }) {
     return (
         <Flex className=" border-b border-gray-200 py-2 ">
 
-            <div className='flex justify-between items-center w-full '>
+            <div className=' w-full flex flex-wrap justify-between items-center '>
 
                 <div className='flex items-center gap-3 relative'>
                     <div onClick={toggle} className='cursor-pointer'>
@@ -33,9 +34,9 @@ export default function DashboardHeader({ opened, toggle }: { opened: boolean, t
                             />
                             <button className="bg-blue-300 text-white px-4 py-2  hover:bg-blue-400 transition">Search</button>
                         </div>
-                        <IoSunnyOutline />
-                        <RxCountdownTimer />
-                        <FaBell />
+                        <IoSunnyOutline className='text-2xl' />
+                        <PiClockCounterClockwise  className='text-2xl'  />
+                        <FaRegBell  className='text-2xl'  />
                     </div>
                 </div>
             </div>

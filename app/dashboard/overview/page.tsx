@@ -6,14 +6,16 @@ import NotificationBar from "../natification-bar";
 
 export default function Overview() {
     return (
-        <div className="flex">
+        <div className="flex flex-wrap lg:flex-nowrap lg:gap-4 xl:gap-8 justify-between items-start w-full h-full">
             <div>
-                <div>Overview</div>
+          
                 <Views />
                 <LineChartView />
-                <TinyBarChartBox />
+                <TinyBarChartBox    />
             </div>
-            <NotificationBar />
+            <div className=" hidden  xl:flex xl:flex-col  ">
+                <NotificationBar  />
+            </div>
         </div>
     );
 }

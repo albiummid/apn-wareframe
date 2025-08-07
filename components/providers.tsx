@@ -11,7 +11,7 @@ const theme = createTheme({
 });
 export default function Providers(props: PropsWithChildren) {
     return (
-        <div>
+        <div >
             <ToastContainer
                 position="top-right"
                 autoClose={2000}
