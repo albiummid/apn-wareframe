@@ -1,5 +1,4 @@
 import {
-    Button,
     Center,
     Flex,
     ScrollArea,
@@ -48,7 +47,8 @@ const MyAMIs = () => {
 };
 
 const QuickStart = () => {
-    const { osImage, setState, osArch } = useEC2CreationState();
+    const { osImage, setState, osArch, name, activeSections } =
+        useEC2CreationState();
 
     useEffect(() => {
         setState({ osImage: osList[0], osArch: archList[0] });
@@ -133,17 +133,13 @@ const QuickStart = () => {
         },
     ];
 
-    const handleNavigateNext = () => {
-        setState({ sectionEnabledTill: 6 });
-    };
-
     return (
         <div className="">
             <ScrollArea scrollbars="x" className="">
                 <Flex gap={10} py={20}>
-                    {osList.map((x) => (
+                    {osList.map((x, y) => (
                         <OSCard
-                            key={x.label}
+                            key={y}
                             imagePath={x.imagePath}
                             label={x.label}
                             onPick={() => {
@@ -162,7 +158,7 @@ const QuickStart = () => {
                     placeholder="Select Architecture"
                     label="Architecture"
                     data={archList}
-                    value={osArch.value}
+                    value={osArch?.value}
                     onChange={(value) => {
                         setState({
                             osArch: archList.find((x) => x.value === value),
@@ -175,9 +171,6 @@ const QuickStart = () => {
                     label="AMI ID"
                     value={`ami-${osArch.value}-009ewce3b5ddfb1`}
                 />
-            </Flex>
-            <Flex justify={"end"} align={"center"}>
-                <Button onClick={handleNavigateNext}>Next</Button>
             </Flex>
         </div>
     );

@@ -1,11 +1,58 @@
-import { Stack } from "@mantine/core";
+import { qc } from "@/components/providers";
+import TerminalSimulator from "@/components/terminal";
+import { api } from "@/services/api";
+import { Button, Stack } from "@mantine/core";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useEC2CreationState } from ".";
 
 export default function InstanceTypes() {
+    const { setState, name, osArch, osImage, tags } = useEC2CreationState();
+    const [opened, setOpened] = useState(false);
+
+    const validateError = () => {
+        let isValid = true;
+        if (name.length > 0) {
+            setState({
+                errors: { name: undefined },
+            });
+        } else {
+            isValid = false;
+            let msg = "Name field is required";
+            toast.error(msg);
+            setState({
+                errors: { name: msg },
+            });
+            document
+                .getElementById("ac_1")
+                ?.scrollIntoView({ behavior: "smooth" });
+        }
+
+        return isValid;
+    };
+    const handleLaunchInstance = async () => {
+        try {
+            const isValid = validateError();
+            if (!isValid) return;
+            const data = {
+                name,
+                tags,
+                osArch: osArch.label,
+                osImage,
+                status: "running",
+            };
+            const instance = await api.post("/ec2", data);
+            console.log(instance);
+            setOpened(true);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <Stack>
             <div className="space-y-3">
                 <p>Instance Types</p>
-                <div className="p-5 cursor-pointer hover:bg-cyan-50 border border-cyan-300 rounded-lg bg-cyan-50/10">
+                <div className="p-5 cursor-pointer hover:bg-cyan-50 border bg-cyan-50 border-cyan-300 rounded-lg ">
                     <div className=" flex items-center justify-between">
                         <span>t2.micro</span>
                         <span>Free tier eligible</span>
@@ -33,6 +80,19 @@ export default function InstanceTypes() {
                     </div>
                 </div>
             </div>
+
+            <Button loading={opened} mt={10} onClick={handleLaunchInstance}>
+                {opened ? "Launching..." : "Launch Instance"}
+            </Button>
+            {opened && (
+                <TerminalSimulator
+                    onFinish={() => {
+                        setState({ opened: false });
+                        toast.success("EC2 Instance created");
+                        qc.invalidateQueries({ queryKey: ["instance-list"] });
+                    }}
+                />
+            )}
         </Stack>
     );
 }

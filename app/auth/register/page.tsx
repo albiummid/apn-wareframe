@@ -1,49 +1,78 @@
 "use client";
+import { api } from "@/services/api";
 import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 export default function RegisterScreen() {
-    const [passwordShown, { toggle }] = useDisclosure();
-    const [passwordconfirmShown, { toggle:toggle1 }] = useDisclosure();
+    const [passwordShown, { toggle: togglePasswordShown }] =
+        useDisclosure(false);
+    const [confirmPasswordShown, { toggle: toggleConfirmPasswordShown }] =
+        useDisclosure(false);
+
     const form = useForm({
         initialValues: {
             firstName: "",
             lastName: "",
             email: "",
             password: "",
-            confirmpassword: "",
+            confirmPassword: "",
         },
-         validate: {
-      confirmpassword: (value, values) =>
-        value !== values.password ? 'Passwords did not match' : null,
-    },
-        
+        validate: {
+            firstName: (value) =>
+                !value ? "Required" : value.length < 3 && "Must be 3 character",
+            lastName: (value) =>
+                !value ? "Required" : value.length < 3 && "Must be 3 character",
+            email: (value) =>
+                !/^\S+@\S+$/.test(value)
+                    ? "Invalid email"
+                    : !value && "Email is required",
+            password: (value) =>
+                !value
+                    ? "Required"
+                    : value.length < 6 && "Password must be 6 length",
+            confirmPassword: (value, values) =>
+                !value
+                    ? "Required"
+                    : value !== values.password
+                    ? "Passwords did not match"
+                    : null,
+        },
+    });
+    const router = useRouter();
+
+    const { mutate, error } = useMutation({
+        mutationKey: ["register"],
+        mutationFn: async (values: typeof form.values) => {
+            return await api.post("/auth/register", values);
+        },
+        onError(error) {
+            toast.error(error.message);
+        },
+        onSuccess(data) {
+            toast.success(data.data.message);
+            router.push("/auth/login");
+        },
     });
 
-    const handleSubmit = async (values: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        password: string;
-        confirmpassword: string;
-    }) => {
-        console.log(values);
-    };
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className=" border p-5 rounded-lg w-1/2 max-w-sm border-gray-200 shadow-lg">
                 <div className="my-5 space-y-2 text-center">
-                    <h1 className=" text-4xl text-center">Regstration  </h1>
+                    <h1 className=" text-4xl text-center"> Registration </h1>
                     <p className=" text-xs text-gray-400">
                         Sign Up to your account with credentials
                     </p>
                 </div>
                 <form
                     className=" space-y-3"
-                    onSubmit={form.onSubmit(handleSubmit)}
+                    onSubmit={form.onSubmit((values) => {
+                        mutate(values);
+                    })}
                 >
                     <div className="flex justify-between items-center gap-2">
                         <TextInput
@@ -69,35 +98,34 @@ export default function RegisterScreen() {
                         withAsterisk
                         label={"Password"}
                         placeholder="your secret password"
-                       
                         {...form.getInputProps("password")}
                         type={passwordShown ? "text" : "password"}
                         rightSection={
-                            passwordShown ? (
-                                <FiEye onClick={toggle} />
-                            ) : (
-                                <FiEyeOff onClick={toggle} />
-                            )
+                            <div onClick={togglePasswordShown}>
+                                {passwordShown ? <FiEye /> : <FiEyeOff />}
+                            </div>
                         }
                     />
                     <TextInput
                         withAsterisk
                         label={"Confirm Password"}
                         placeholder="your secret password"
-                        
-                        {...form.getInputProps("confirmpassword")}
-                        type={passwordconfirmShown ? "text" : "password"}
+                        {...form.getInputProps("confirmPassword")}
+                        type={confirmPasswordShown ? "text" : "password"}
                         rightSection={
-                            passwordconfirmShown ? (
-                                <FiEye onClick={toggle1} />
-                            ) : (
-                                <FiEyeOff onClick={toggle1} />
-                            )
+                            <div onClick={toggleConfirmPasswordShown}>
+                                {confirmPasswordShown ? (
+                                    <FiEye />
+                                ) : (
+                                    <FiEyeOff />
+                                )}
+                            </div>
                         }
                     />
-                    <div className="flex justify-center items-center mt-10">
+                    <p className="text-center text-red-500">{error?.message}</p>
+                    <div className="flex justify-center items-center mt-5 space-y-2">
                         <Button fullWidth type="submit">
-                            Regster
+                            Register
                         </Button>
                     </div>
                 </form>

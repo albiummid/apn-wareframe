@@ -1,8 +1,14 @@
 "use client";
+import { api } from "@/services/api";
+import { useAppState } from "@/services/states";
 import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import { useMutation } from "@tanstack/react-query";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 export default function LoginScreen() {
     const [passwordShown, { toggle }] = useDisclosure();
@@ -11,15 +17,45 @@ export default function LoginScreen() {
             email: "",
             password: "",
         },
+        validate: {
+            email: (value) =>
+                !/^\S+@\S+$/.test(value)
+                    ? "Invalid email"
+                    : !value && "Email is required",
+            password: (value) =>
+                !value
+                    ? "Password required"
+                    : value.length < 6 && "Password must be 6 length",
+        },
+    });
+    const router = useRouter();
+
+    const { mutate, error } = useMutation({
+        mutationKey: ["login"],
+        mutationFn: async (values: typeof form.values) => {
+            return await api.post("/auth/login", values);
+        },
+        onError(error) {
+            toast.error(error.message);
+        },
+        onSuccess(data) {
+            let info = data.data.data;
+            localStorage.setItem("token", info.token);
+            localStorage.setItem("user", JSON.stringify(info.user));
+            
+            useAppState.setState({
+                token:info.token,
+                user:info.user,
+                isAuthenticated:true,
+                isLoading:false
+            })
+            toast.success(
+                `Welcome back ${info.user.firstName} ${info.user.lastName}`
+            );
+            router.push("/dashboard/overview");
+        },
     });
 
-    const handleSubmit = async (values: {
-        email: string;
-        password: string;
-    }) => {
-        console.log(values);
-        
-    };
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className=" border p-5 rounded-lg w-1/2 max-w-sm border-gray-200 shadow-lg">
@@ -30,8 +66,10 @@ export default function LoginScreen() {
                     </p>
                 </div>
                 <form
-                    className=" space-y-3"
-                    onSubmit={form.onSubmit(handleSubmit)}
+                    className="space-y-3"
+                    onSubmit={form.onSubmit((values) => {
+                        mutate(values);
+                    })}
                 >
                     <TextInput
                         withAsterisk
@@ -53,11 +91,23 @@ export default function LoginScreen() {
                             )
                         }
                     />
-                    <div className="flex justify-center items-center mt-10">
+                    <div className=" space-y-2">
+                        <p className="text-center text-red-500">
+                            {error?.message}
+                        </p>
                         <Button fullWidth type="submit">
                             Login
                         </Button>
                     </div>
+
+                    <p className=" text-sm text-center">
+                        No account ?{" "}
+                        <Link href={"/auth/register"}>
+                            <span className="underline cursor-pointer">
+                                create one
+                            </span>
+                        </Link>
+                    </p>
                 </form>
             </div>
         </div>

@@ -1,20 +1,24 @@
 'use client'
 import React from 'react'
-
 import { FaArrowTrendUp } from 'react-icons/fa6'
 
+
+
+
 const StatCard = ({ label, amount, percentage }) => {
-    return <div className='w-[202px] h-28 bg-[#EDEEFC] rounded-2xl px-6 py-6 ' >
-        <h1 className='text-[14px] '>{label}</h1>
-        <div className='flex items-center gap-3 '>
-            <h4 className='py-2 text-2xl '>{amount}</h4>
-            <div className='flex items-center gap-4  '>
-                <span className='text-[12px]'>{percentage}%</span>
+    return <div className='w-65 h-28 bg-[#EDEEFC] items-center justify-between rounded-2xl px-6 py-6 ' >
+        <h1 className='text-[20px] '>{label}</h1>
+        <div className='flex flex-wrap items-center gap-5  justify-between '>
+            <h4 className='py-2 text-[18px] '>{amount}</h4>
+            <div className='flex items-center gap-6 justify-between  '>
+                <span className='text-[14px]'>{percentage}%</span>
                 <FaArrowTrendUp />
             </div>
         </div>
     </div>
 }
+
+
 
 
 
@@ -42,10 +46,15 @@ const Views = () => {
         },
 
     ]
+
+   
+
+
     return (
         <>
-            <div className=' flex  gap-5 flex-wrap py-5'>
+            <div className=' md:flex  hidden gap-5 '>
 
+               
                 {statList.map((x, i) => <StatCard key={i} label={x.label} amount={x.amount} percentage={x.percentage} />)}
 
             </div>

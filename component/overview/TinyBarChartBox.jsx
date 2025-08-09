@@ -2,89 +2,29 @@
 
 import React from 'react'
 import { GoDotFill } from 'react-icons/go';
-import { BarChart, Bar, ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import { Cell, Pie, PieChart } from 'recharts';
+import { BarChart, CompositeChart, RadialBarChart } from '@mantine/charts';
+
+
+
 
 
 const data = [
-    {
-        name: 'Linux',
-        uv: 4000,
-        pv: 2400,
-        amt: 2400,
-    },
-    {
-        name: 'Mac',
-        uv: 3000,
-        pv: 1398,
-        amt: 2210,
-    },
-    {
-        name: 'iOS',
-        uv: 2000,
-        pv: 9800,
-        amt: 2290,
-    },
-    {
-        name: 'Windows',
-        uv: 2780,
-        pv: 3908,
-        amt: 2000,
-    },
-    {
-        name: 'Android',
-        uv: 1890,
-        pv: 4800,
-        amt: 2181,
-    },
-    {
-        name: 'Other',
-        uv: 2390,
-        pv: 3800,
-        amt: 2500,
-    },
+    { month: 'January', Smartphones: 1200, Laptops: 900, Tablets: 200 },
+    { month: 'February', Smartphones: 1900, Laptops: 1200, Tablets: 400 },
+    { month: 'March', Smartphones: 400, Laptops: 1000, Tablets: 200 },
+    { month: 'April', Smartphones: 1000, Laptops: 200, Tablets: 800 },
+    { month: 'May', Smartphones: 800, Laptops: 1400, Tablets: 1200 },
+    { month: 'June', Smartphones: 750, Laptops: 600, Tablets: 1000 },
 
 ];
 
-const data01 = [
-    {
-        "name": "United States",
-        "value": 52,
-    },
-    {
-        "name": "Canada",
-        "value": 22.8
-    },
-    {
-        "name": "Mexico",
-        "value": 13.9
-    },
-    {
-        "name": "Other",
-        "value": 11.2
-    },
-
+const data1 = [
+    { name: 'United States', value: 400, color: 'black.6' },
+    { name: 'Canada', value: 300, color: 'blue.6' },
+    { name: 'Mexico', value: 300, color: 'green.6' },
+    { name: 'Other', value: 200, color: 'red.6' },
 ];
 
-const data02 = [
-    {
-        "name": "United States",
-        "value": 52,
-    },
-    {
-        "name": "Canada",
-        "value": 22.8
-    },
-    {
-        "name": "Mexico",
-        "value": 13.9
-    },
-    {
-        "name": "Other",
-        "value": 17.2
-    },
-
-];
 
 
 const StatCard = ({ label1, label2, color }) => {
@@ -132,37 +72,28 @@ const TinyBarChartBox = () => {
             label2: "11.2%",
             color: 'red',
         },
-   
+
 
     ]
 
 
     return (
-        <div className=' h-70 w-280 flex items-center justify-between   '>
+        <div className=' h-70 w-280 flex md:flex-wrap items-center justify-between   '>
             <div className='grid grid-cols-2 gap-4 w-full h-full '>
                 <div className='w-full h-75 bg-[#F9F9FA] py-4 px-4 rounded-2xl mt-8'>
                     <h1>Traffic by Device</h1>
                     <div className='items-center'>
-
                         <BarChart
-                            width={550}
-                            height={300}
+                            h={240}
                             data={data}
-                            margin={{
-                                top: 30,
-                                right: 110,
-                                left: -10,
-                                bottom: 50,
-                            }}
-                            barSize={20}
-                        >
-                            <XAxis dataKey="name" scale="point" padding={{ left: 10, right: 10 }} />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <Bar dataKey="pv" fill="#8884d8" background={{ fill: '#eee' }} />
-                        </BarChart>
+                            dataKey="month"
+                            type="stacked"
+                            series={[
+                                { name: 'Smartphones', color: 'violet.6' },
+                                { name: 'Laptops', color: 'blue.6' },
+                                { name: 'Tablets', color: 'teal.6' },
+                            ]}
+                        />
 
                     </div>
                 </div>
@@ -171,20 +102,16 @@ const TinyBarChartBox = () => {
                     <h1>Traffic by Device</h1>
                     <div className='grid grid-cols-2 gap-10 items-center justify-between  '>
                         <div>
-                            <PieChart width={250} height={250}>
-                                <Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="#AEC7ED" />
-                                <Pie data={data02} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#94E9B8" label />
+                            <RadialBarChart data={data1} dataKey="value" h={280} withLabels />;
 
-                            </PieChart>
 
                         </div>
-
                         <div>
                             <ul >
                                 <li >
                                     {statList.map((item, idx) => (
 
-                                        <StatCard key={idx} label1={item.label1} label2={item.label2} color={item.color}  />
+                                        <StatCard key={idx} label1={item.label1} label2={item.label2} color={item.color} />
 
                                     ))}
 

@@ -6,11 +6,10 @@ import InstanceTypes from "./instance-type";
 import KeyPair from "./keypair";
 import NameAndTag from "./name-tag";
 import OSImageSelection from "./os-image-selection";
-import StorageVolume from "./storage-volume";
-import Summary from "./summary";
 
 // States
 type TState = {
+    opened: boolean;
     errors: {
         name?: string;
     };
@@ -21,6 +20,11 @@ type TState = {
         imagePath: string;
         description: string;
     };
+    keyPair: {
+        name: string;
+        type: string;
+        format: string;
+    };
     osArch: {
         label: string;
         value: string;
@@ -28,9 +32,11 @@ type TState = {
     sectionEnabledTill: number;
     activeSections: string[];
     setState: (state: Omit<Partial<TState>, "setState">) => void;
+    reset: () => void;
 };
 
-export const useEC2CreationState = create<TState>((set, get) => ({
+const initialState = {
+    opened: false,
     name: "",
     tags: [],
     osImage: {
@@ -42,40 +48,39 @@ export const useEC2CreationState = create<TState>((set, get) => ({
         label: "",
         value: "",
     },
-    sectionEnabledTill: 1,
-    activeSections: ["1"],
+    keyPair: {
+        name: "",
+        type: "rsa",
+        format: ".ppm",
+    },
+    sectionEnabledTill: 4,
+    activeSections: ["1", "2", "3"],
     errors: {},
-    setState(state) {
-        let errors = {
-            ...get().errors,
-        };
-        // if (Object.keys(get().errors).length > 0) {
-        //     let entries = Object.entries(state);
+};
 
-        //     entries.forEach(([k, v]) => {
-        //         if (v && k in errors) {
-        //             delete errors[k as keyof TState["errors"]];
-        //         }
-        //     });
-        // }
+export const useEC2CreationState = create<TState>((set, get) => ({
+    ...initialState,
+    setState(state) {
         set({ ...get(), ...state });
+    },
+    reset: () => {
+        set(initialState);
     },
 }));
 
 // Component
-export default function EC2InstanceModal({
-    opened,
-    onClose,
-}: {
-    opened: boolean;
-    onClose: () => void;
-}) {
-    const { sectionEnabledTill, activeSections, setState } =
+export default function EC2InstanceModal() {
+    const { sectionEnabledTill, opened, activeSections, setState, reset } =
         useEC2CreationState();
+
     const accordionList = [
         {
             label: "Name and Tags",
             component: <NameAndTag />,
+        },
+        {
+            label: "Key Pairs",
+            component: <KeyPair />,
         },
         {
             label: "Application and OS Image (Amazon Machine Image)",
@@ -84,18 +89,6 @@ export default function EC2InstanceModal({
         {
             label: "Instance Type",
             component: <InstanceTypes />,
-        },
-        {
-            label: "Key Pairs",
-            component: <KeyPair />,
-        },
-        {
-            label: "StorageVolume",
-            component: <StorageVolume />,
-        },
-        {
-            label: "Summary",
-            component: <Summary />,
         },
     ];
 
@@ -107,11 +100,13 @@ export default function EC2InstanceModal({
         }
     }, [sectionEnabledTill]);
 
+    const onClose = () => {
+        reset();
+    };
+
     return (
         <Drawer
-            // withCloseButton={false}
             position="right"
-            // size={"xl"}
             size={"xl"}
             opened={opened}
             onClose={onClose}
@@ -129,7 +124,11 @@ export default function EC2InstanceModal({
                 chevronIconSize={23}
             >
                 {accordionList.map((x, i) => (
-                    <Accordion.Item key={x.label} value={String(i + 1)}>
+                    <Accordion.Item
+                        key={x.label}
+                        id={"ac_" + String(i + 1)}
+                        value={String(i + 1)}
+                    >
                         <Accordion.Control
                             disabled={i + 1 > sectionEnabledTill}
                             className=""

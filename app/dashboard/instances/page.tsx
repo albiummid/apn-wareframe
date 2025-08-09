@@ -1,76 +1,132 @@
 "use client";
 import DashWrapper from "@/component/layouts/dashwrapper";
-import EC2InstanceModal from "@/components/modals/ec2-instance-create-modal";
+import EC2InstanceModal, {
+    useEC2CreationState,
+} from "@/components/modals/ec2-instance-create-modal";
 import TurboTable, { TableColumn } from "@/components/turbo-table";
+import { api } from "@/services/api";
 import { Button, Menu, TextInput } from "@mantine/core";
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaRotateRight } from "react-icons/fa6";
 
-type TInstanceStatus = "running" | "stopped" | "hibernated" | "rebooting";
+type TInstanceStatus =
+    | "running"
+    | "stopped"
+    | "hibernated"
+    | "rebooting"
+    | "terminated";
 export default function Page() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [launchModalOpened, setLaunchModalOpened] = useState(false);
-    const [instanceInfo, setInstanceInfo] = useState<{
-        id: number;
-        _id: string;
-        status: TInstanceStatus;
-    } | null>(null);
-    const [selectedRows, setSelectedRows] = useState([]);
+    const {
+        data,
+        isPending: isLoading,
+        refetch,
+    } = useQuery({
+        queryKey: ["instance-list"],
+        queryFn: () => api.get("/ec2"),
+        select(data) {
+            return data.data;
+        },
+    });
+    const { setState } = useEC2CreationState();
+    const setOpened = (status: boolean) => {
+        setState({ opened: status });
+    };
 
-    const disableByStatus = (statusList: TInstanceStatus[]) =>
-        instanceInfo ? statusList.includes(instanceInfo?.status) : false;
+    const [selectedRows, setSelectedRows] = useState([]);
+    const instanceInfo =
+        data?.find((x: any) => x._id === selectedRows?.[0]) || null;
+    const disableByStatus = useCallback(
+        (statusList: TInstanceStatus[]) =>
+            instanceInfo ? statusList.includes(instanceInfo?.status) : false,
+        [instanceInfo]
+    );
 
     const stateActions = [
         {
             label: "Stop instance",
-            disabled: disableByStatus(["running", "rebooting"]),
-            action: () => {},
+            disabled: disableByStatus([
+                "rebooting",
+                "stopped",
+                "hibernated",
+                "terminated",
+            ]),
+            action: async () => {
+                await api.post(`/ec2/${instanceInfo?._id}`, {
+                    status: "stopped",
+                });
+                refetch();
+            },
         },
         {
             label: "Start instance",
-            action: () => {},
+            action: async () => {
+                await api.post(`/ec2/${instanceInfo?._id}`, {
+                    status: "running",
+                });
+                refetch();
+            },
             disabled: disableByStatus(["running"]),
         },
         {
             label: "Reboot instance",
-            action: () => {},
-            disabled: instanceInfo?.status === "rebooting",
+            action: async () => {
+                await api.post(`/ec2/${instanceInfo?._id}`, {
+                    status: "rebooting",
+                });
+                refetch();
+            },
+            disabled: disableByStatus(["hibernated", "terminated"]),
         },
         {
             label: "Hibernate instance",
-            action: () => {},
-            disabled: disableByStatus(["running"]),
+            action: async () => {
+                await api.post(`/ec2/${instanceInfo?._id}`, {
+                    status: "hibernated",
+                });
+                refetch();
+            },
+            disabled: disableByStatus(["running", "stopped"]),
         },
         {
             label: "Terminate instance",
-            disabled: disableByStatus(["rebooting", "stopped"]),
-            action: () => {},
+            disabled: disableByStatus(["rebooting", "stopped", "terminated"]),
+            action: async () => {
+                await api.post(`/ec2/${instanceInfo?._id}`, {
+                    status: "terminated",
+                });
+                refetch();
+            },
         },
     ];
 
     const instanceActions = [
         {
-            label: "Create",
-            action: () => {},
-            disabled: false,
-        },
-        {
             label: "Delete",
-            action: () => {},
-            disabled: false,
+            action: async () => {
+                await api.delete(`/ec2/${instanceInfo?._id}`);
+                refetch();
+            },
             color: "red",
         },
     ];
 
-    const columns: TableColumn<{
-        id: string;
-        name: string;
-        status: TInstanceStatus;
-    }>[] = [
+    const columns: TableColumn<{}>[] = [
         {
             key: "name",
             label: "Name",
+        },
+        {
+            key: "osImage",
+            label: "OS Image",
+            render(row: any, index, array) {
+                return <p>{row?.osImage?.label}</p>;
+            },
+        },
+        {
+            key: "osArch",
+            label: "OS Architecture",
         },
         {
             key: "_id",
@@ -79,23 +135,11 @@ export default function Page() {
         {
             key: "status",
             label: "Instance state",
-            render(row, index, array) {
+            render(row: any, index, array) {
                 return <div>{row.status}</div>;
             },
         },
     ];
-
-    const refetchData = async () => {
-        let timeout;
-        setIsLoading(true);
-
-        if (timeout) {
-            clearTimeout(timeout);
-        }
-        timeout = setTimeout(() => {
-            setIsLoading(false);
-        }, 2000);
-    };
 
     return (
         <DashWrapper>
@@ -104,11 +148,7 @@ export default function Page() {
                 <div className="flex justify-between items-center ">
                     <h1 className="text-lg">Instances</h1>
                     <div className=" flex items-center gap-3">
-                        <Button
-                            onClick={refetchData}
-                            // disabled={instanceInfo === null}
-                            variant="outline"
-                        >
+                        <Button onClick={() => refetch()} variant="outline">
                             <FaRotateRight />
                         </Button>
                         <Button
@@ -127,25 +167,25 @@ export default function Page() {
                             </Menu.Target>
                             <Menu.Dropdown>
                                 <Menu.Label>State actions</Menu.Label>
-                                {stateActions.map((x) => (
+                                {stateActions.map((x, i) => (
                                     <Menu.Item
                                         disabled={x?.disabled}
                                         onClick={() => {
                                             x.action();
                                         }}
-                                        key={x.label}
+                                        key={i}
                                     >
                                         {x.label}
                                     </Menu.Item>
                                 ))}
                                 <Menu.Label>Instance actions</Menu.Label>
-                                {instanceActions.map((x) => (
+                                {instanceActions.map((x, y) => (
                                     <Menu.Item
                                         disabled={x?.disabled}
                                         onClick={() => {
                                             x.action();
                                         }}
-                                        key={x.label}
+                                        key={y}
                                         color={x?.color}
                                     >
                                         {x.label}
@@ -156,7 +196,7 @@ export default function Page() {
 
                         <Button
                             onClick={() => {
-                                setLaunchModalOpened(true);
+                                setOpened(true);
                             }}
                             variant="outline"
                         >
@@ -181,44 +221,18 @@ export default function Page() {
                     columns={columns}
                     // setSelectedRows={setSelectedRows}
                     onRowSelect={(item) => {
-                        setInstanceInfo((pv) => {
-                            if (pv && pv._id === item._id) {
-                                setSelectedRows([]);
-                                return null;
+                        setSelectedRows((pv) => {
+                            if (pv[0] === item._id) {
+                                return [];
                             }
-                            setSelectedRows([item._id]);
-                            return item;
+                            return [item._id];
                         });
                     }}
                     selectedRows={selectedRows}
-                    data={[
-                        {
-                            _id: "d34fdsfsdfsdfhtjuyik",
-                            id: 1,
-                            name: "Django Server",
-                            status: "running",
-                        },
-                        {
-                            _id: "fdfssdfs5455456555",
-                            id: 5,
-                            name: "NodeJS realtime server",
-                            status: "running",
-                        },
-                        {
-                            _id: "6fsdfsdf438ujkjkl6",
-                            id: 6,
-                            name: "Hono server",
-                            status: "running",
-                        },
-                    ]}
+                    data={data}
                 />
             </div>
-            <EC2InstanceModal
-                opened={launchModalOpened}
-                onClose={() => {
-                    setLaunchModalOpened(false);
-                }}
-            />
+            <EC2InstanceModal />
         </DashWrapper>
     );
 }

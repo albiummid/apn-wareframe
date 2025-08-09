@@ -1,27 +1,43 @@
 "use client";
-import { AppShell, Burger, Button, Group, NavLink } from "@mantine/core";
+import { useAppState } from "@/services/states";
+import { AppShell, Box, LoadingOverlay, NavLink } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
-import { PropsWithChildren } from "react";
-import { FaChartPie, FaUncharted } from "react-icons/fa";
-import { GrStorage } from "react-icons/gr";
-import { MdKey } from "react-icons/md";
-import { SiAmazonec2 } from "react-icons/si";
+import { PropsWithChildren, useEffect } from "react";
+import { BiAnalyse } from "react-icons/bi";
+import { FaChartPie, FaDatabase } from "react-icons/fa";
+import { FaBucket } from "react-icons/fa6";
+import { GiNetworkBars } from "react-icons/gi";
+import { GrOverview, GrUserAdmin } from "react-icons/gr";
+import { IoMdAnalytics } from "react-icons/io";
+import { IoSettingsOutline } from "react-icons/io5";
+import { RiSideBarFill, RiSideBarLine } from "react-icons/ri";
+import {
+    SiAmazonec2,
+    SiCivicrm,
+    SiCoinmarketcap,
+    SiPlausibleanalytics,
+} from "react-icons/si";
+import DashboardHeader from "./dashboard-header";
+
 
 export default function DashboardLayout(props: PropsWithChildren) {
-    const [opened, { toggle }] = useDisclosure();
+    const [opened, { toggle }] = useDisclosure(true);
+    const [mobileO, { toggle: toggleMobile }] = useDisclosure(false);
     const router = useRouter();
     const pathname = usePathname();
+
+    const { isLoading, isAuthenticated, user, token } = useAppState();
 
     const navSections = [
         {
             label: "Analytics",
-            icon: <FaUncharted />,
+            icon: <SiPlausibleanalytics />,
             links: [
                 {
                     label: "Overview",
                     link: "/overview",
-                    icon: <FaChartPie />,
+                    icon: <IoMdAnalytics />,
                 },
             ],
         },
@@ -30,103 +46,122 @@ export default function DashboardLayout(props: PropsWithChildren) {
             icon: <FaChartPie />,
             links: [
                 {
-                    label: "EC2 Instances",
-                    link: "/ec2",
+                    label: "Instances",
+                    link: "/instances",
                     icon: <SiAmazonec2 />,
                 },
                 {
-                    label: "Elastic Load Balance",
-                    link: "/computing/volume",
+                    label: "S3 Buckest",
+                    link: "/s3-buckets",
                     disabled: true,
-                    icon: <GrStorage />,
+                    icon: <FaBucket />,
                 },
                 {
-                    label: "Auto Scaling Group",
-                    link: "/computing/key-pairs",
+                    label: "RDS Databases",
+                    link: "/rds-databases",
                     disabled: true,
-                    icon: <MdKey />,
+                    icon: <FaDatabase />,
+                },
+                {
+                    label: "Networks",
+                    link: "/networks",
+                    disabled: true,
+                    icon: <GiNetworkBars />,
                 },
             ],
         },
         {
             label: "CRM",
-            icon: <FaUncharted />,
+            icon: <SiCivicrm />,
             links: [
                 {
                     label: "Overview",
                     link: "/overview",
-                    icon: <FaChartPie />,
+                    icon: <SiCivicrm />,
                 },
             ],
         },
         {
             label: "Market Place",
-            icon: <FaUncharted />,
+            icon: <SiCoinmarketcap />,
             links: [
                 {
-                    label: "Overview",
+                    label: "Market Overview",
                     link: "/overviedw",
-                    icon: <FaChartPie />,
+                    icon: <GrOverview />,
                 },
             ],
         },
         {
             label: "Reporting Analysis",
-            icon: <FaUncharted />,
+            icon: <BiAnalyse />,
             links: [
                 {
-                    label: "Overview",
-                    link: "/overvieww",
-                    icon: <FaChartPie />,
+                    label: "Analysis",
+                    link: "/Analysis",
+                    icon: <BiAnalyse />,
                 },
             ],
         },
         {
             label: "Settings and Admin",
-            icon: <FaUncharted />,
+            icon: <IoSettingsOutline />,
             links: [
                 {
-                    label: "Overview",
-                    link: "/overviews",
-                    icon: <FaChartPie />,
+                    label: "Admin",
+                    link: "/Admin",
+                    icon: <GrUserAdmin />,
                 },
             ],
         },
     ];
 
+    console.log(user, token);
+
+    useEffect(() => {
+        if (!isLoading && !isAuthenticated) {
+            router.push("/auth/login");
+        }
+    }, [isLoading, isAuthenticated]);
+
+    if (isLoading) return <LoadingOverlay />;
+    if (!isAuthenticated) return null;
+
     return (
         <AppShell
-            header={{ height: 60 }}
             navbar={{
                 width: 300,
                 breakpoint: "sm",
-                collapsed: { mobile: !opened },
+                collapsed: { mobile: !mobileO, desktop: !opened },
             }}
             padding="md"
         >
-            <AppShell.Header>
-                <Group h="100%" px="md">
-                    <Burger
-                        opened={opened}
-                        onClick={toggle}
-                        hiddenFrom="sm"
-                        size="sm"
-                    />
-                    <p className="text-lg font-bold text-cyan-600">
-                        BetopiaCloud
-                    </p>
-                </Group>
-            </AppShell.Header>
             <AppShell.Navbar>
-                {navSections.map((section) => {
+                <AppShell.Section
+                    p="md"
+                    className="flex items-center justify-between"
+                >
+                    <Box hiddenFrom="sm">
+                        <div onClick={toggleMobile} className="cursor-pointer">
+                            {mobileO ? (
+                                <RiSideBarFill size={30} />
+                            ) : (
+                                <RiSideBarLine size={30} />
+                            )}
+                        </div>
+                    </Box>
+                    <p className="text-2xl font-bold">BetopiaCloud</p>
+                </AppShell.Section>
+
+                {navSections.map((section, i) => {
                     return (
-                        <AppShell.Section key={section.label}>
+                        <AppShell.Section key={i}>
                             <NavLink
                                 leftSection={section.icon}
                                 label={section.label}
                             >
                                 <>
-                                    {section.links.map((item) => {
+                                    {section.links.map((item, i) => {
                                         const isActive = pathname.includes(
                                             item.link
                                         );
@@ -134,7 +169,7 @@ export default function DashboardLayout(props: PropsWithChildren) {
                                             <NavLink
                                                 leftSection={item.icon}
                                                 disabled={item?.disabled}
-                                                key={item.link}
+                                                key={i}
                                                 active={isActive}
                                                 label={item.label}
                                                 onClick={() => {
@@ -152,14 +187,23 @@ export default function DashboardLayout(props: PropsWithChildren) {
                 })}
 
                 {/* Footer */}
-                <AppShell.Section
+                {/* <AppShell.Section
                     className="mt-auto flex justify-center"
                     p="md"
                 >
                     <Button>SignOut</Button>
-                </AppShell.Section>
+                </AppShell.Section> */}
             </AppShell.Navbar>
-            <AppShell.Main>{props.children}</AppShell.Main>
+            <AppShell.Main>
+                <DashboardHeader
+                    opened={opened}
+                    toggle={() => {
+                        toggle();
+                        toggleMobile();
+                    }}
+                />
+                <div className="p-5">{props.children}</div>
+            </AppShell.Main>
         </AppShell>
     );
 }
