@@ -181,7 +181,7 @@ export default function Page() {
                                 <Menu.Label>Instance actions</Menu.Label>
                                 {instanceActions.map((x, y) => (
                                     <Menu.Item
-                                        disabled={x?.disabled}
+                                        disabled={x.disabled}
                                         onClick={() => {
                                             x.action();
                                         }}
